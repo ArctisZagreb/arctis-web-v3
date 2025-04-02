@@ -74,7 +74,7 @@ const ServicesOverview = () => {
 
         {/* Grid s karticama usluga */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <Card
               key={service.title}
               className="flex flex-col transition-all duration-300 hover:shadow-lg hover:translate-y-[-5px] bg-white/90 backdrop-blur-sm rounded-lg overflow-hidden" // Dodan overflow-hidden i rounded-lg

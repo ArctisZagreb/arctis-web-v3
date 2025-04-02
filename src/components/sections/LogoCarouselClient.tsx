@@ -38,28 +38,11 @@ function LogoCarouselClient({
   logos = [],
   title = "Companies That Chose Us",
 }: LogoCarouselClientProps) {
-  // Early return if no logos to prevent unnecessary rendering
-  if (!logos || logos.length === 0) {
-    return (
-      <section className="py-12 bg-gray-50 overflow-hidden">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold text-center mb-8">{title}</h2>
-          <p className="text-muted-foreground">No client logos found.</p>
-        </div>
-      </section>
-    );
-  }
-
-  // Only duplicate if we have enough logos to make it worthwhile
-  const duplicatedLogos = logos.length > 2 ? [...logos, ...logos] : logos;
-
   const [scrollPosition, setScrollPosition] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-
-  // Measure container width once all images are loaded
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -91,8 +74,11 @@ function LogoCarouselClient({
       clearTimeout(timeoutId);
     };
   }, [logos.length]);
-
   // Animation effect
+
+  // Only duplicate if we have enough logos to make it worthwhile
+  const duplicatedLogos = logos.length > 2 ? [...logos, ...logos] : logos;
+
   useEffect(() => {
     if (
       !isLoaded ||
@@ -128,6 +114,20 @@ function LogoCarouselClient({
       cancelAnimationFrame(animationId);
     };
   }, [containerWidth, isPaused, duplicatedLogos.length, isLoaded]);
+
+  // Early return if no logos to prevent unnecessary rendering
+  if (!logos || logos.length === 0) {
+    return (
+      <section className="py-12 bg-gray-50 overflow-hidden">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="text-2xl font-bold text-center mb-8">{title}</h2>
+          <p className="text-muted-foreground">No client logos found.</p>
+        </div>
+      </section>
+    );
+  }
+
+  // Measure container width once all images are loaded
 
   return (
     <section className="py-12 bg-gray-50 overflow-hidden">

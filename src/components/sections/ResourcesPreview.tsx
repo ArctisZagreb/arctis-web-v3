@@ -2,7 +2,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion"; // Uvest ćemo kasnije za animacije
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,7 +36,7 @@ function getResourceUrl(item: QueryResultStoryListItem): string {
 }
 
 // Framer Motion varijante (opcionalno)
-const sectionVariants = {
+/* const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
@@ -49,7 +48,7 @@ const sectionVariants = {
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-};
+}; */
 
 // Glavna async komponenta
 async function ResourcesPreview() {

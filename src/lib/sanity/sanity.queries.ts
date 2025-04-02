@@ -1,9 +1,8 @@
 // src/lib/sanity/sanity.queries.ts
 
 import { groq } from "next-sanity";
-import { client, urlFor } from "./sanity.client"; // Uvoz konfiguriranog klijenta i urlFor
+import { client, urlFor } from "./sanity.client";
 
-// Uvoz SVIH potrebnih tipova iz centralne datoteke
 import type {
   QueryResultReferenceLogo,
   ProcessedLogo,
@@ -11,7 +10,6 @@ import type {
   QueryResultSingleStory,
   QueryResultArchibusProduct,
   QueryResultReference,
-  PortableTextBlock, // Uvezi i SanityImage ako ga QueryResult tipovi koriste direktno
 } from "@/types/sanity";
 
 // --- Reference Logos ---

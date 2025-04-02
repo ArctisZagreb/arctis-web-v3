@@ -6,13 +6,13 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ctaSectionData } from "@/data/pageContent"; // Uvezi podatke
-import { Box, Calculator, ArrowRight } from "lucide-react"; // Uvezi ikone
+import { ArrowRight } from "lucide-react"; // Uvezi ikone
 
 // Mapa za mapiranje imena ikona u komponente
-const iconMap: { [key: string]: React.ElementType } = {
+/* const iconMap: { [key: string]: React.ElementType } = {
   Box: Box,
   Calculator: Calculator,
-};
+}; */
 
 // Framer Motion varijante
 const sectionVariants = {

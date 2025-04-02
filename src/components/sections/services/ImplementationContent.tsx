@@ -18,7 +18,6 @@ import {
   Users,
 } from "lucide-react";
 import SimpleCallToAction from "@/components/sections/SimpleCallToAction"; // Assuming CTA component path
-import { cn } from "@/lib/utils"; // Optional: if you use cn for merging classes
 
 // Reusable InfoCard component (similar to the one from ProjectManagement)
 const InfoCard: React.FC<{ children: React.ReactNode; className?: string }> = ({
@@ -73,9 +72,9 @@ export const ImplementationContent: React.FC = () => {
             Our expert-led implementation projects are built on a solid
             foundation of proven standards. We follow best-practice
             methodologies, refined over a decade of experience, ensuring your
-            solution aligns perfectly with your operational needs, whether it's
-            a standard COTS deployment, fully customized, or a balanced hybrid
-            approach.
+            solution aligns perfectly with your operational needs, whether
+            it&apos;s a standard COTS deployment, fully customized, or a
+            balanced hybrid approach.
           </p>
         </div>
       </section>

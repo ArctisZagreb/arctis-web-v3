@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose, // Za gumb za zatvaranje
-  DialogDescription, // Opcionalno
   DialogFooter, // Opcionalno
 } from "@/components/ui/dialog"; // Uvezi Dialog komponente
 import {
@@ -25,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, X } from "lucide-react"; // Dodaj X ikonu za zatvaranje
+import { CheckCircle2 } from "lucide-react"; // Dodaj X ikonu za zatvaranje
 import { archibusPlansData, archibusPlansSection } from "@/data/pageContent";
 // Importaj interface ako ga koristiš
 // import type { ArchibusPlan } from '@/types/data'; // Prilagodi putanju

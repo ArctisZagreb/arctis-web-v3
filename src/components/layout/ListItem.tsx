@@ -4,10 +4,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import {
-  NavigationMenuLink,
-  navigationMenuTriggerStyle, // Možemo koristiti stil triggera ako želimo
-} from "@/components/ui/navigation-menu";
+import { NavigationMenuLink } from "@/components/ui/navigation-menu";
 
 // Definiramo props koje ListItem prima
 interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {

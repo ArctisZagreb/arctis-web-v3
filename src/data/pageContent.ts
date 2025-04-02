@@ -117,18 +117,3 @@ export const ctaSectionData = {
 };
 
 // src/data/pageContent.ts
-
-// Define interfaces matching the component (optional but recommended)
-interface CtaAction {
-  icon: string;
-  title: string;
-  description: string;
-  link: string;
-  buttonText: string;
-}
-
-interface CtaSectionData {
-  title: string;
-  subtitle: string;
-  actions: CtaAction[];
-}

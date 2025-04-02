@@ -2,13 +2,10 @@
 // src/components/GlobeAnimation.tsx
 import React, { useRef, Suspense } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Sphere } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
-// Komponenta koja predstavlja sam globus
 const RotatingGlobe = () => {
-  // Učitaj teksturu Zemlje - promijeni u .png
-  // Pobrini se da 'earth-map.png' postoji u /public direktoriju
   const texture = useLoader(THREE.TextureLoader, "/earth-map.png"); // <<< PROMIJENI OVDJE
 
   const meshRef = useRef<THREE.Mesh>(null!);

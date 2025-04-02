@@ -5,8 +5,6 @@ import type {
   Image as SanityImage,
   Slug,
   PortableTextBlock as SanityPortableTextBlock,
-  Asset,
-  File as SanityFile,
   Reference as SanityReference,
 } from "sanity";
 

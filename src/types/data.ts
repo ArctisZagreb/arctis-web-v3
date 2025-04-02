@@ -15,3 +15,17 @@ export interface ArchibusPlan {
     content: string; // Markdown string
   };
 }
+// Define interfaces matching the component (optional but recommended)
+export interface CtaAction {
+  icon: string;
+  title: string;
+  description: string;
+  link: string;
+  buttonText: string;
+}
+
+export interface CtaSectionData {
+  title: string;
+  subtitle: string;
+  actions: CtaAction[];
+}

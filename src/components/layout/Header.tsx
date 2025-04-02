@@ -20,7 +20,6 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { headerNavLinks } from "@/data/navigation";
 import ListItem from "./ListItem";
 
