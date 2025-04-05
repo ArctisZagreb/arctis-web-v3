@@ -1,9 +1,3 @@
-/**
- * RootLayout.tsx
- *
- * Root layout component that wraps all pages in the application.
- * Includes global styling, fonts, metadata, and common layout elements.
- */
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";

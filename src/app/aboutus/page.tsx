@@ -1,4 +1,3 @@
-// src/app/aboutus/page.tsx
 import React from "react";
 import WhoWeAreSection from "@/components/sections/about/WhoWeAreSection";
 import TechnologySection from "@/components/sections/about/TechnologySection";

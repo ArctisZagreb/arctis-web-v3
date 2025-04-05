@@ -1,9 +1,3 @@
-/**
- * ConsultingPage.tsx
- *
- * Page component that serves as the entry point for the consulting services route.
- * Defines metadata for SEO and renders the ConsultingContent component.
- */
 import React from "react";
 import { ConsultingContent } from "@/components/sections/services/ConsultingContent";
 import { Metadata } from "next";

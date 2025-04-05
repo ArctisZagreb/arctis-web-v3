@@ -1,4 +1,3 @@
-// app/project-management/page.tsx
 import React from "react";
 import { Metadata } from "next";
 import { ProjectManagementContent } from "@/components/sections/services/ProjectManagementContent";

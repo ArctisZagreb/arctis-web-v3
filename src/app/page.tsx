@@ -21,4 +21,3 @@ export default function Home() {
     </>
   );
 }
-/* Ajmo na <SolutionsTrust /> sekciju */
