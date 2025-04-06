@@ -1,4 +1,3 @@
-// Primjer interface-a (prilagodi ako koristiš drugačiju strukturu)
 import type { LucideIcon } from "lucide-react";
 
 export interface ArchibusPlan {
@@ -10,12 +9,11 @@ export interface ArchibusPlan {
   ctaLink: string;
   featured: boolean;
   modal?: {
-    // Opcionalni modal objekt
     title: string;
     content: string; // Markdown string
   };
 }
-// Define interfaces matching the component (optional but recommended)
+// Define interfaces matching the component
 export interface CtaAction {
   icon: string;
   title: string;

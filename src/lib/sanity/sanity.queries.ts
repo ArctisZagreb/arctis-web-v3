@@ -231,18 +231,26 @@ export async function getArchibusProducts(): Promise<
 const allReferencesQuery = groq`
 *[_type == "references"] | order(client.name asc) {
     _id,
-    "clientName": client.name,
-    "clientUrl": client.url,
+    client { 
+        name,
+        url
+    },
     typeOfWork,
     slug,
-    logo, // Cijeli Image objekt za urlFor
-    "logoUrl": logo.asset->url, // Opcionalni direktni URL
-    servicesProvided[]{
+    logo { // Cijeli logo objekt
+        asset,
+        alt 
+     },
+    servicesProvided[]{ 
         _key,
         serviceName,
         subservices
     },
-    "imageGalleryUrls": imageGallery[].asset->url // Niz URL-ova
+    imageGallery[]{ 
+        asset,
+        _key,
+        alt 
+     }
 }`;
 
 /**
@@ -250,13 +258,11 @@ const allReferencesQuery = groq`
  */
 export async function getAllReferences(): Promise<QueryResultReference[]> {
   try {
-    // Fetch koristi <QueryResultReference[]>
+    // Koristi ažurirani query i tip
     return await client.fetch<QueryResultReference[]>(
-      allReferencesQuery,
+      allReferencesQuery, // Osiguraj da koristi ažurirani query
       {},
-      {
-        /* Cache options */
-      }
+      { next: { tags: ["references"] } }
     );
   } catch (error) {
     console.error("Failed to fetch all references:", error);
