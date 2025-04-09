@@ -25,42 +25,6 @@ export type QueryResultReferenceLogo = {
 };
 
 /**
- * Type for postsQuery / successStoriesQuery results (for list views).
- * Includes basic data and directly fetched main image URL.
- */
-export type QueryResultStoryListItem = {
-  _id: string;
-  title?: string;
-  slug?: Slug;
-  publishedAt?: string;
-  description?: string;
-  mainImageUrl?: string | null;
-  externalImg?: string;
-  externalNews?: {
-    flag?: boolean;
-    link?: string;
-  };
-};
-
-/**
- * Type for postBySlugQuery / successStoryBySlugQuery results (for single page view).
- * Includes full body (PortableTextBlock) and details.
- */
-export type QueryResultSingleStory = {
-  _id: string;
-  title?: string;
-  slug?: Slug;
-  publishedAt?: string;
-  mainImageUrl?: string | null;
-  externalImg?: string;
-  body?: PortableTextBlock[];
-  externalNews?: {
-    flag?: boolean;
-    link?: string;
-  };
-};
-
-/**
  * Type for archibusProductsQuery results.
  * Contains data about Archibus products, including full objects for images/icons
  * and sub-menu items with their PortableTextBlock content.
@@ -202,3 +166,37 @@ export interface SanityReferenceDoc extends BaseSanityDoc {
   }[];
   imageGallery?: SanityImage[];
 }
+
+export type QueryResultStoryListItem = {
+  _id: string;
+  _type: "post" | "successStories"; // Added _type
+  title?: string;
+  slug?: Slug;
+  publishedAt?: string;
+  description?: string;
+  mainImageUrl?: string | null;
+  externalImg?: string;
+  externalNews?: {
+    flag?: boolean;
+    link?: string;
+  };
+};
+
+// Update QueryResultSingleStory to include _type (optional but consistent)
+export type QueryResultSingleStory = {
+  _id: string;
+  _type: "post" | "successStories";
+  title?: string;
+  slug?: Slug;
+  publishedAt?: string;
+  mainImageUrl?: string | null; // Or 'imageUrl' if you reverted that name
+  imageAlt?: string | null; // <--- MAKE SURE THIS LINE EXISTS
+  externalImg?: string;
+  description?: string | null; // <--- MAKE SURE THIS LINE EXISTS
+  body?: PortableTextBlock[];
+  externalNews?: {
+    flag?: boolean;
+    link?: string;
+  };
+  author?: { name?: string } | null; // Optional author
+};

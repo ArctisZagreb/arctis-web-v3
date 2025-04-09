@@ -71,34 +71,32 @@ export async function getClientLogos(): Promise<ProcessedLogo[]> {
   }
 }
 // --- Posts / Success Stories (Lists) ---
-
-// Zajednička projekcija za liste priča
+// Updated projection for story lists - added _type
 const storyListProjection = groq`{
   _id,
+  _type, // Added _type
   title,
   slug,
   publishedAt,
   description,
-  "mainImageUrl": mainImage.asset->url, // Direktan URL slike
+  "mainImageUrl": image.asset->url,
   externalImg,
-  externalNews
+  externalNews{ flag, link } // Simplified selection
 }`;
 
 const postsQuery = groq`*[_type == "post"] | order(publishedAt desc) ${storyListProjection}`;
 const successStoriesQuery = groq`*[_type == "successStories"] | order(publishedAt desc) ${storyListProjection}`;
 
 /**
- * Dohvaća sve objave (posts) za listu.
+ * Fetches all posts for list view.
+ * Uses updated QueryResultStoryListItem type.
  */
 export async function getAllPostsList(): Promise<QueryResultStoryListItem[]> {
   try {
-    // Fetch koristi <QueryResultStoryListItem[]> za očekivani rezultat
     return await client.fetch<QueryResultStoryListItem[]>(
       postsQuery,
       {},
-      {
-        /* Cache options */
-      }
+      { next: { tags: ["post"] } } // Add caching tag
     );
   } catch (error) {
     console.error("Failed to fetch all posts list:", error);
@@ -107,19 +105,17 @@ export async function getAllPostsList(): Promise<QueryResultStoryListItem[]> {
 }
 
 /**
- * Dohvaća sve uspješne priče za listu.
+ * Fetches all success stories for list view.
+ * Uses updated QueryResultStoryListItem type.
  */
 export async function getAllSuccessStoriesList(): Promise<
   QueryResultStoryListItem[]
 > {
   try {
-    // Fetch koristi <QueryResultStoryListItem[]> za očekivani rezultat
     return await client.fetch<QueryResultStoryListItem[]>(
       successStoriesQuery,
       {},
-      {
-        /* Cache options */
-      }
+      { next: { tags: ["successStory"] } } // Add caching tag
     );
   } catch (error) {
     console.error("Failed to fetch all success stories list:", error);
@@ -129,58 +125,69 @@ export async function getAllSuccessStoriesList(): Promise<
 
 // --- Single Post / Success Story ---
 
-// Zajednička projekcija za pojedinačni prikaz
+// Updated projection for single story - added _type
 const singleStoryProjection = groq`{
     _id,
+    _type, // Added _type
     title,
     slug,
     publishedAt,
-    "mainImageUrl": mainImage.asset->url, // Direktan URL
+    "mainImageUrl": image.asset->url,
     externalImg,
-    body, // PortableTextBlock polje
-    externalNews
+    body[]{ // Ensure all block content fields are selected if needed
+        ...,
+        // If image has alt defined inline:
+        _type == "image" => {
+           ...,
+           asset->{..., "_ref": asset._ref} // Include asset reference if needed
+         },
+        // If youtube has fields:
+        _type == "youtube" => {
+            ...,
+            // Select specific youtube fields if necessary
+        }
+    },
+    externalNews{ flag, link }
+    // Optional: Add author
+    // ,"author": author->{name}
 }`;
 
 const postBySlugQuery = groq`*[_type == "post" && slug.current == $slug][0] ${singleStoryProjection}`;
 const successStoryBySlugQuery = groq`*[_type == "successStories" && slug.current == $slug][0] ${singleStoryProjection}`;
 
 /**
- * Dohvaća jednu objavu prema slugu.
+ * Fetches a single post by slug.
+ * Uses updated QueryResultSingleStory type.
  */
 export async function getPostBySlug(
   slug: string
 ): Promise<QueryResultSingleStory | null> {
   if (!slug) return null;
   try {
-    // Fetch koristi <QueryResultSingleStory | null> i prosljeđuje slug parametar
     return await client.fetch<QueryResultSingleStory | null>(
       postBySlugQuery,
-      { slug }, // Parametar za query
-      {
-        /* Cache options */
-      }
+      { slug },
+      { next: { tags: [`post:${slug}`] } } // Add specific caching tag
     );
   } catch (error) {
     console.error(`Failed to fetch post with slug "${slug}":`, error);
-    return null; // Vrati null u slučaju greške
+    return null;
   }
 }
 
 /**
- * Dohvaća jednu uspješnu priču prema slugu.
+ * Fetches a single success story by slug.
+ * Uses updated QueryResultSingleStory type.
  */
 export async function getSuccessStoryBySlug(
   slug: string
 ): Promise<QueryResultSingleStory | null> {
   if (!slug) return null;
   try {
-    // Fetch koristi <QueryResultSingleStory | null> i prosljeđuje slug
     return await client.fetch<QueryResultSingleStory | null>(
       successStoryBySlugQuery,
       { slug },
-      {
-        /* Cache options */
-      }
+      { next: { tags: [`successStory:${slug}`] } } // Add specific caching tag
     );
   } catch (error) {
     console.error(`Failed to fetch success story with slug "${slug}":`, error);

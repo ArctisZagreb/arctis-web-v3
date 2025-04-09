@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack -p 4747",
+    "dev": "next dev --turbopack -p 3666",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -23,6 +23,7 @@
     "@react-three/fiber": "^9.1.1",
     "@sanity/client": "^6.28.4",
     "@sanity/image-url": "^1.1.0",
+    "@sanity/vision": "^3.82.0",
     "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

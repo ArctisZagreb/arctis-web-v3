@@ -44,7 +44,7 @@ const FaqAccordion: React.FC<FaqAccordionProps> = ({ filteredCategories }) => {
     // type="multiple" allows opening multiple categories at once
     // collapsible allows closing all items
     <Accordion type="multiple" className="w-full space-y-3 md:space-y-4">
-      {filteredCategories.map((category, categoryIndex) => {
+      {filteredCategories.map((category, _categoryIndex) => {
         // Select icon based on iconName or use default
         const CategoryIcon = category.iconName
           ? iconMap[category.iconName]
