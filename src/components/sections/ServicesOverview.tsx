@@ -20,7 +20,7 @@ const services = [
     link: "/project-management",
     IconComponent: Briefcase,
     // Dodajemo placeholder za imgPath radi konzistentnosti, iako ga Image ne koristi direktno ovdje
-    imgPath: "/images/placeholder.png",
+    imgPath: "/assets/images/ProjectManagement.png",
   },
   {
     title: "Implementation",
@@ -28,7 +28,7 @@ const services = [
       "Faster deployment and reliable ROI through standard or customized ARCHIBUS implementations, leveraging best practices.",
     link: "/implementation",
     IconComponent: Settings,
-    imgPath: "/images/placeholder.png",
+    imgPath: "/assets/images/Implementation.png",
   },
   {
     title: "Consulting",
@@ -36,7 +36,7 @@ const services = [
       "Strategic IT advisory, architecture planning, operational assessment, and implementation guidance to align technology with your goals.",
     link: "/consulting",
     IconComponent: Users,
-    imgPath: "/images/placeholder.png",
+    imgPath: "/assets/images/Consulting.png",
   },
 ];
 
