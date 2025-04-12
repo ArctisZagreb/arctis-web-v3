@@ -35,11 +35,11 @@ const Header = () => {
           className="mr-6 flex items-center space-x-2 flex-shrink-0"
         >
           <Image
-            src="/assets/logo/arctis-logo-blue.png" // Koristi logo iz public/assets
+            src="/assets/logo/arctis-logo-blue.png"
             alt="Arctis Logo"
-            width={90} // Prilagodi dimenzije prema potrebi
-            height={30} // Prilagodi dimenzije
-            priority // Učitaj logo prioritetno
+            width={90}
+            height={30}
+            priority
           />
         </Link>
 
@@ -49,7 +49,6 @@ const Header = () => {
             <NavigationMenuList>
               {headerNavLinks.map((navItem) => (
                 <NavigationMenuItem key={navItem.label}>
-                  {/* Ako nema sublinks, to je običan link */}
                   {!navItem.sublinks ? (
                     <Link href={navItem.href} legacyBehavior passHref>
                       <NavigationMenuLink
@@ -59,31 +58,12 @@ const Header = () => {
                       </NavigationMenuLink>
                     </Link>
                   ) : (
-                    // Ako ima sublinks, koristi Trigger i Content
                     <>
                       <NavigationMenuTrigger>
                         {navItem.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
                         <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                          {/* Opcionalna prva, veća stavka (npr. link na glavnu stranicu sekcije) */}
-                          {/* <li className="row-span-3">
-                            <NavigationMenuLink asChild>
-                              <a
-                                className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                                href={navItem.href} // Glavni link za sekciju ako postoji
-                              >
-                                 <div className="mb-2 mt-4 text-lg font-medium">
-                                  {navItem.label} Overview
-                                </div>
-                                <p className="text-sm leading-tight text-muted-foreground">
-                                   Brief description of the whole section...
-                                </p>
-                              </a>
-                            </NavigationMenuLink>
-                          </li> */}
-
-                          {/* Mapiraj sublinks koristeći ListItem komponentu */}
                           {navItem.sublinks.map((subItem) => (
                             <ListItem
                               key={subItem.label}
@@ -103,7 +83,6 @@ const Header = () => {
           </NavigationMenu>
         </div>
 
-        {/* Mobile Menu Button & Sheet */}
         <div className="flex items-center md:hidden ml-auto">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
@@ -112,7 +91,10 @@ const Header = () => {
                 <span className="sr-only">Open menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent
+              side="right"
+              className="w-[300px] sm:w-[400px] [&>button:first-of-type]:hidden"
+            >
               <div className="flex justify-between items-center mb-6">
                 <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
                   <Image
@@ -142,16 +124,6 @@ const Header = () => {
                         </Link>
                       </SheetClose>
                     ) : (
-                      // Prikazujemo samo glavni link za sekciju na mobitelu, bez dropdowna
-                      /*  <SheetClose asChild>
-                        <span
-                          // Možeš dodati onClick event ovdje ako želiš neku akciju
-                          className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent cursor-default"
-                        >
-                          {navItem.label}
-                        </span>
-                      </SheetClose> */
-
                       <div className="pl-4">
                         <span className="block px-3 py-1 text-base font-medium text-muted-foreground">
                           {navItem.label}

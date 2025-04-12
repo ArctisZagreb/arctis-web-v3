@@ -15,19 +15,19 @@ const trustedLogos = [
   },
   {
     name: "Company B",
-    path: "/assets/logo/companies/cat.png",
+    path: "/assets/logo/companies/tht-logo.png",
     width: 150,
     height: 40,
   },
   {
     name: "Company C",
-    path: "/assets/logo/companies/cat.png",
+    path: "/assets/logo/companies/vodafone.png",
     width: 100,
     height: 60,
   },
   {
     name: "Company D",
-    path: "/assets/logo/companies/cat.png",
+    path: "/assets/logo/companies/noaa.png",
     width: 130,
     height: 55,
   },
