@@ -10,12 +10,12 @@ import { Building2, Users, Award, Sparkles } from "lucide-react";
 const sectionVariants = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-};
+} as const;
 
 const itemVariants = {
   hidden: { opacity: 0, x: -30 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
+} as const;
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.9 },
@@ -24,7 +24,7 @@ const cardVariants = {
     scale: 1,
     transition: { duration: 0.5, delay: 0.2, ease: "backOut" },
   },
-};
+} as const;
 
 export default function WhoWeAreSection() {
   return (

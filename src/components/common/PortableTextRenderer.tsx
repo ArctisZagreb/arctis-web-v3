@@ -5,14 +5,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText, type PortableTextComponents } from "@portabletext/react";
 import { urlFor } from "@/lib/sanity/sanity.queries";
-import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import type { SanityImageSource } from "@sanity/image-url";
 import type { PortableTextBlock } from "@/types/sanity";
 import { cn } from "@/lib/utils";
 import { LinkIcon } from "lucide-react";
 
 // Helper function to get image URL from Sanity image source
 const getImageUrl = (
-  source: SanityImageSource | null | undefined
+  source: SanityImageSource | null | undefined,
 ): string | null => {
   if (
     !source ||
@@ -278,7 +278,7 @@ const PortableTextRenderer: React.FC<PortableTextRendererProps> = ({
         "prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-600 prose-blockquote:bg-blue-50/60 prose-blockquote:rounded-r-md prose-blockquote:shadow-sm",
         "prose-code:before:content-none prose-code:after:content-none prose-code:bg-slate-100 prose-code:border prose-code:border-slate-200 prose-code:text-red-600 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-[0.9em] prose-code:font-mono",
         "prose-hr:my-8 prose-hr:border-slate-200",
-        className
+        className,
       )}
     >
       <PortableText value={value} components={customPortableTextComponents} />

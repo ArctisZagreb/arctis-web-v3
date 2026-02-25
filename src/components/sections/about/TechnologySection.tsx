@@ -19,7 +19,7 @@ const cardVariants = {
     scale: 1,
     transition: { duration: 0.5, ease: "easeOut" },
   },
-};
+} as const;
 
 export default function TechnologySection() {
   return (

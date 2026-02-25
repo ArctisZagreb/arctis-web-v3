@@ -31,7 +31,7 @@ export function FormSection({
       overflow: "visible",
       transition: { duration: 0.3, ease: "easeInOut" },
     },
-  };
+  } as const;
 
   return (
     <div className={cn("mb-6", className)}>

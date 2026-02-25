@@ -41,7 +41,7 @@ const detailVariants = {
     height: 0,
     transition: { duration: 0.2, ease: "easeIn" },
   },
-};
+} as const;
 
 const ReferenceDetails: React.FC<ReferenceDetailsProps> = ({ reference }) => {
   if (!reference) {
@@ -124,7 +124,7 @@ const ReferenceDetails: React.FC<ReferenceDetailsProps> = ({ reference }) => {
                                     {subserviceName}
                                   </li>
                                 );
-                              }
+                              },
                             )}
                           </ul>
                         )}
