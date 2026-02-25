@@ -26,20 +26,13 @@ const contentVariants = {
   initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    transition: {
-      duration: 0.3,
-      ease: "easeOut",
-      when: "beforeChildren",
-    },
+    transition: { duration: 0.3, ease: "easeInOut", when: "beforeChildren" },
   },
   exit: {
     opacity: 0,
-    transition: {
-      duration: 0.2,
-      ease: "easeIn",
-    },
+    transition: { duration: 0.2, ease: "easeInOut" },
   },
-};
+} as const;
 
 const ProductContent: React.FC<ProductContentProps> = ({
   productName,
@@ -54,7 +47,7 @@ const ProductContent: React.FC<ProductContentProps> = ({
       window.requestAnimationFrame(() => {
         window.requestAnimationFrame(() => {
           const content = document.getElementById(
-            `content-${subMenuItem._key}`
+            `content-${subMenuItem._key}`,
           );
           if (content) {
             content.style.opacity = "1";
@@ -68,7 +61,7 @@ const ProductContent: React.FC<ProductContentProps> = ({
     <main
       className={cn(
         "flex-1 bg-white overflow-y-auto relative flex flex-col",
-        className
+        className,
       )}
     >
       {/* Mobile Modal Header */}

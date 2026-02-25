@@ -22,7 +22,7 @@ const sectionVariants = {
     y: 0,
     transition: { duration: 0.6, ease: "easeOut" },
   },
-};
+} as const;
 
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -31,7 +31,7 @@ const itemVariants = {
     scale: 1,
     transition: { duration: 0.5, ease: "backOut" },
   },
-};
+} as const;
 
 const CallToActionSection = () => {
   return (

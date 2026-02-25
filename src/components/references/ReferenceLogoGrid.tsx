@@ -23,7 +23,7 @@ const logoVariants = {
   },
   hover: { scale: 1.08, transition: { duration: 0.2 } },
   tap: { scale: 0.95 },
-};
+} as const;
 
 const ReferenceLogoGrid: React.FC<ReferenceLogoGridProps> = ({
   references,
@@ -62,7 +62,7 @@ const ReferenceLogoGrid: React.FC<ReferenceLogoGridProps> = ({
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500",
               isSelected
                 ? "border-blue-500 shadow-lg ring-2 ring-blue-500/50 opacity-100"
-                : "border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 opacity-70 hover:opacity-100"
+                : "border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 opacity-70 hover:opacity-100",
             )}
             title={`View details for ${ref.client?.name || "this client"}`}
             aria-pressed={isSelected}

@@ -40,7 +40,7 @@ const sectionVariants = {
     y: 0,
     transition: { duration: 0.6, ease: "easeOut" },
   },
-};
+} as const;
 
 const itemVariants = {
   hidden: { opacity: 0, scale: 0.95 },
@@ -49,7 +49,7 @@ const itemVariants = {
     scale: 1,
     transition: { duration: 0.5, ease: "backOut" },
   },
-};
+} as const;
 
 const CallToActionServices: React.FC<CallToActionServicesProps> = ({
   title,
@@ -94,7 +94,7 @@ const CallToActionServices: React.FC<CallToActionServicesProps> = ({
       className={cn(
         "w-full py-16 md:py-24 lg:py-32 bg-gradient-to-r text-white", // Base classes
         backgroundClasses(), // Apply background color based on variant
-        className // Allow custom classNames to be passed
+        className, // Allow custom classNames to be passed
       )}
       variants={sectionVariants}
       initial="hidden"
@@ -155,7 +155,7 @@ const CallToActionServices: React.FC<CallToActionServicesProps> = ({
                   className={cn(
                     buttonBgClasses(), // Apply button background based on variant
                     buttonTextClasses(), // Apply button text color based on variant
-                    "group mt-auto"
+                    "group mt-auto",
                   )}
                 >
                   <Link href={action.link}>
