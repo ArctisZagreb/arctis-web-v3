@@ -161,6 +161,11 @@ export default function ContactPage() {
                     value={formatIban(siteInfo.bank.iban)}
                     isMonospace={true}
                   />
+                  <InfoItem
+                    label="BIC"
+                    value={formatIban(siteInfo.bank.bic)}
+                    isMonospace={true}
+                  />
                 </div>
               </div>
             </div>

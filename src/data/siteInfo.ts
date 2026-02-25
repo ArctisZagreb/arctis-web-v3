@@ -23,9 +23,10 @@ export const siteInfo = {
 
   // Bankovne informacije
   bank: {
-    name: "Hypo Alpe-Adria-Bank d.d.", // Možda Addiko Bank sada? Provjeriti ime.
+    name: "Addiko Bank Hrvatska ", // Možda Addiko Bank sada? Provjeriti ime.
     address: "Slavonska avenija 6, 10000 Zagreb",
-    iban: "HR46 2500 0091 1013 3645 6",
+    iban: "LT323250046291683428",
+    bic: "REVOLT21",
     // swift: 'HAABHR22' // Opcionalno: SWIFT/BIC
   },
 
