@@ -7,12 +7,14 @@ import SolutionsTrust from "@/components/sections/SolutionsTrust";
 import ArchibusPlans from "@/components/sections/ArchibusPlans";
 import CallToActionSection from "@/components/sections/CallToActionSection";
 import ResourcesPreview from "@/components/sections/ResourcesPreview";
+import PartnersAndStats from "@/components/sections/PartnersAndStats";
 
 export default function Home() {
   return (
     <>
       <HeroSection />
       <ClientLogos />
+      <PartnersAndStats />
       <ServicesOverview />
       <SolutionsTrust />
       <ArchibusPlans />

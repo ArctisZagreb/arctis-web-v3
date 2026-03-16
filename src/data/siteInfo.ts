@@ -23,8 +23,8 @@ export const siteInfo = {
 
   // Bankovne informacije
   bank: {
-    name: "Addiko Bank Hrvatska ", // Možda Addiko Bank sada? Provjeriti ime.
-    address: "Slavonska avenija 6, 10000 Zagreb",
+    name: "Revolut Bank UAB", // Možda Addiko Bank sada? Provjeriti ime.
+    address: "Konstitucijos ave. 21B, Vilnius, 08130, Republika Litva",
     iban: "LT323250046291683428",
     bic: "REVOLT21",
     // swift: 'HAABHR22' // Opcionalno: SWIFT/BIC
