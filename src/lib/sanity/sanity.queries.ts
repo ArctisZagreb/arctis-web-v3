@@ -1,5 +1,6 @@
 // src/lib/sanity/sanity.queries.ts
 
+import { cache } from "react";
 import { groq } from "next-sanity";
 import { client, urlFor } from "./sanity.client";
 
@@ -14,11 +15,24 @@ import type {
 
 // ============================================================================
 // Cache konfiguracija — centralizirano na jednom mjestu
+// ----------------------------------------------------------------------------
+// Svježina sadržaja se primarno osigurava on-demand revalidacijom preko
+// Sanity webhooka (/api/revalidate) koji poziva revalidateTag(<_type>).
+// Vremenska revalidacija je samo "fallback" — namjerno je duga kako bi se
+// smanjio broj ISR writeova na Vercelu (svaka regeneracija stranice = write).
+// Tagovi = Sanity _type dokumenta, tako da webhook može jednostavno
+// revalidirati `body._type`.
 // ============================================================================
 
-const CACHE_SHORT = 60; // 60 sekundi — za sadržaj koji se često mijenja (reference, postovi)
-const CACHE_MEDIUM = 300; // 5 minuta — za umjereno dinamičan sadržaj
-const CACHE_LONG = 3600; // 1 sat — za rijetko mijenjani sadržaj (logotipi, proizvodi)
+const CACHE_DEFAULT = 3600; // 1 sat — postovi, success stories, reference
+const CACHE_LONG = 86400; // 24 sata — logotipi, Archibus proizvodi
+
+export const SANITY_TAGS = {
+  post: "post",
+  successStories: "successStories",
+  references: "references",
+  archibusProducts: "archibusProducts",
+} as const;
 
 // ============================================================================
 // Reference Logos (za ClientLogos carousel)
@@ -40,7 +54,7 @@ export async function getClientLogos(): Promise<ProcessedLogo[]> {
       {
         next: {
           revalidate: CACHE_LONG,
-          tags: ["client-logos"],
+          tags: [SANITY_TAGS.references],
         },
       },
     );
@@ -102,8 +116,8 @@ export async function getAllPostsList(): Promise<QueryResultStoryListItem[]> {
       {},
       {
         next: {
-          revalidate: CACHE_SHORT,
-          tags: ["post"],
+          revalidate: CACHE_DEFAULT,
+          tags: [SANITY_TAGS.post],
         },
       },
     );
@@ -122,8 +136,8 @@ export async function getAllSuccessStoriesList(): Promise<
       {},
       {
         next: {
-          revalidate: CACHE_SHORT,
-          tags: ["successStory"],
+          revalidate: CACHE_DEFAULT,
+          tags: [SANITY_TAGS.successStories],
         },
       },
     );
@@ -163,7 +177,7 @@ const successStoryBySlugQuery = groq`
   *[_type == "successStories" && slug.current == $slug][0] ${singleStoryProjection}
 `;
 
-export async function getPostBySlug(
+export const getPostBySlug = cache(async function getPostBySlug(
   slug: string,
 ): Promise<QueryResultSingleStory | null> {
   if (!slug) return null;
@@ -173,8 +187,8 @@ export async function getPostBySlug(
       { slug },
       {
         next: {
-          revalidate: CACHE_SHORT,
-          tags: ["post", `post:${slug}`],
+          revalidate: CACHE_DEFAULT,
+          tags: [SANITY_TAGS.post, `post:${slug}`],
         },
       },
     );
@@ -182,9 +196,9 @@ export async function getPostBySlug(
     console.error(`Failed to fetch post with slug "${slug}":`, error);
     return null;
   }
-}
+});
 
-export async function getSuccessStoryBySlug(
+export const getSuccessStoryBySlug = cache(async function getSuccessStoryBySlug(
   slug: string,
 ): Promise<QueryResultSingleStory | null> {
   if (!slug) return null;
@@ -194,14 +208,38 @@ export async function getSuccessStoryBySlug(
       { slug },
       {
         next: {
-          revalidate: CACHE_SHORT,
-          tags: ["successStory", `successStory:${slug}`],
+          revalidate: CACHE_DEFAULT,
+          tags: [SANITY_TAGS.successStories, `successStories:${slug}`],
         },
       },
     );
   } catch (error) {
     console.error(`Failed to fetch success story with slug "${slug}":`, error);
     return null;
+  }
+});
+
+// ============================================================================
+// Slugovi — za generateStaticParams (pre-render pri buildu)
+// ============================================================================
+
+const slugsByTypeQuery = groq`
+  *[_type == $type && defined(slug.current)].slug.current
+`;
+
+export async function getSlugsByType(
+  type: typeof SANITY_TAGS.post | typeof SANITY_TAGS.successStories,
+): Promise<string[]> {
+  try {
+    const slugs = await client.fetch<string[]>(
+      slugsByTypeQuery,
+      { type },
+      { next: { revalidate: CACHE_DEFAULT, tags: [type] } },
+    );
+    return Array.isArray(slugs) ? slugs : [];
+  } catch (error) {
+    console.error(`Failed to fetch slugs for type "${type}":`, error);
+    return [];
   }
 }
 
@@ -235,7 +273,7 @@ export async function getArchibusProducts(): Promise<
       {
         next: {
           revalidate: CACHE_LONG,
-          tags: ["archibusProducts"],
+          tags: [SANITY_TAGS.archibusProducts],
         },
       },
     );
@@ -282,8 +320,8 @@ export async function getAllReferences(): Promise<QueryResultReference[]> {
       {},
       {
         next: {
-          revalidate: CACHE_SHORT,
-          tags: ["references"],
+          revalidate: CACHE_DEFAULT,
+          tags: [SANITY_TAGS.references],
         },
       },
     );

@@ -14,12 +14,12 @@ export default function Home() {
     <>
       <HeroSection />
       <ClientLogos />
-      <PartnersAndStats />
       <ServicesOverview />
-      <SolutionsTrust />
+      <PartnersAndStats />
       <ArchibusPlans />
-      <CallToActionSection />
+      <SolutionsTrust />
       <ResourcesPreview />
+      <CallToActionSection />
     </>
   );
 }

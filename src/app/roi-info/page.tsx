@@ -5,7 +5,7 @@ import { HeaderBackground } from "@/components/ui/header-background";
 // import { Calculator, Info } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "ROI Calculator Methodology | Arctis",
+  title: "ROI Calculator Methodology",
   description:
     "Learn how the Arctis Archibus ROI calculator works, the formulas it uses, and the assumptions behind the savings estimates.",
 };
@@ -27,7 +27,7 @@ export default function RoiInfoPage() {
       </section>
 
       {/* Main Content */}
-      <main className="flex-1 bg-white py-16 md:py-24">
+      <div className="flex-1 bg-white py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
           <article className="prose prose-lg lg:prose-xl prose-blue max-w-none text-gray-800">
             <p className="lead text-xl text-gray-600 mb-8">
@@ -370,7 +370,7 @@ export default function RoiInfoPage() {
             </p>
           </article>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

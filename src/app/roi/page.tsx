@@ -28,11 +28,11 @@ export default function RoiCalculatorPage() {
       </section>
 
       {/* Main Content Area */}
-      <main className="flex-1 bg-white py-16 md:py-24">
+      <div className="flex-1 bg-white py-16 md:py-24">
         <div className="container mx-auto px-4 md:px-6">
           <RoiCalculator />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

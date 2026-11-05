@@ -5,7 +5,7 @@ import { HeaderBackground } from "@/components/ui/header-background";
 import NewsListClient from "@/components/post/NewsListClient";
 
 export const metadata: Metadata = {
-  title: "News | Arctis",
+  title: "News",
   description:
     "Stay updated with the latest news, articles, and insights from Arctis d.o.o., experts in IWMS and ARCHIBUS.",
 };
@@ -35,11 +35,11 @@ export default async function NewsPage() {
       </section>
 
       {/* Content Area */}
-      <main className="flex-1 py-16 md:py-20 lg:py-24 bg-white">
+      <div className="flex-1 py-16 md:py-20 lg:py-24 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <NewsListClient initialPosts={allPosts} />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

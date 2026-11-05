@@ -7,7 +7,7 @@ import { HeaderBackground } from "@/components/ui/header-background";
 
 // Page metadata for SEO
 export const metadata: Metadata = {
-  title: "About Arctis | IWMS Experts",
+  title: "About Us | IWMS Experts",
   description:
     "Learn more about ARCTIS, our expertise in IWMS, ARCHIBUS, BIM+FM synergy, the technologies we use, and our valued partners.",
 };
@@ -31,11 +31,11 @@ export default function AboutUsPage() {
       </section>
 
       {/* Main content */}
-      <main className="flex-1">
+      <div className="flex-1">
         <WhoWeAreSection />
         <TechnologySection />
         <PartnersSection />
-      </main>
+      </div>
     </div>
   );
 }

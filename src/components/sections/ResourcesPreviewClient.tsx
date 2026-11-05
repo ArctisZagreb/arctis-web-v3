@@ -116,7 +116,7 @@ export default function ResourcesPreviewClient({
 
                   {/* Resource Description */}
                   <p className="text-sm text-muted-foreground line-clamp-3 flex-grow mb-4">
-                    {item.description || "No description available."}
+                    {item.description}
                   </p>
 
                   {/* Action Link */}

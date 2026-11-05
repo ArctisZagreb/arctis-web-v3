@@ -1,164 +1,68 @@
-"use client";
-
-import { useEffect, useRef, useState, memo } from "react";
+// src/components/sections/LogoCarouselClient.tsx
+// Beskonačni marquee logotipa — čisti CSS (bez re-rendera na svaki frame).
 import Image from "next/image";
 import type { ProcessedLogo } from "@/types/sanity";
-
-// Memoize individual logo components to prevent unnecessary rerenders
-const LogoItem = memo(({ logo }: { logo: ProcessedLogo }) => (
-  <div className="flex-shrink-0 mx-2 sm:mx-8 py-2">
-    <div className="h-16 w-32 relative flex items-center justify-center bg-transparent p-2">
-      {logo.imageUrl ? (
-        <Image
-          src={logo.imageUrl}
-          alt={logo.alt || "Client Logo"}
-          width={220}
-          height={160}
-          loading="eager" // Load eagerly to prevent layout shift
-          priority={true} // Prioritize loading these images
-          className="max-h-[200px] w-auto object-contain grayscale opacity-80 transition-opacity duration-300 hover:opacity-100 hover:grayscale-0"
-        />
-      ) : (
-        <div className="w-full h-full bg-gray-100 flex items-center justify-center text-xs text-muted-foreground">
-          Missing Logo
-        </div>
-      )}
-    </div>
-  </div>
-));
-
-LogoItem.displayName = "LogoItem";
 
 interface LogoCarouselClientProps {
   logos: ProcessedLogo[];
   title?: string;
 }
 
-function LogoCarouselClient({
+function LogoRow({
+  logos,
+  ariaHidden = false,
+}: {
+  logos: ProcessedLogo[];
+  ariaHidden?: boolean;
+}) {
+  return (
+    <ul
+      className="flex shrink-0 items-center gap-12 pr-12 md:gap-16 md:pr-16"
+      aria-hidden={ariaHidden || undefined}
+    >
+      {logos.map((logo) =>
+        logo.imageUrl ? (
+          <li key={logo.key} className="flex h-14 w-32 items-center justify-center">
+            <Image
+              src={logo.imageUrl}
+              alt={ariaHidden ? "" : logo.alt || "Client logo"}
+              width={160}
+              height={64}
+              className="max-h-12 w-auto object-contain opacity-80 grayscale transition duration-300 hover:opacity-100 hover:grayscale-0"
+            />
+          </li>
+        ) : null,
+      )}
+    </ul>
+  );
+}
+
+export default function LogoCarouselClient({
   logos = [],
-  title = "Companies That Chose Us",
+  title = "Companies that chose us",
 }: LogoCarouselClientProps) {
-  const [scrollPosition, setScrollPosition] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-  useEffect(() => {
-    if (!containerRef.current) return;
+  if (!logos || logos.length === 0) return null;
 
-    const updateWidth = () => {
-      if (containerRef.current) {
-        const width =
-          logos.length > 2
-            ? containerRef.current.scrollWidth / 2
-            : containerRef.current.scrollWidth;
-        setContainerWidth(width);
-        setIsLoaded(true);
-      }
-    };
-
-    // Use ResizeObserver for more accurate size detection
-    const resizeObserver = new ResizeObserver(() => {
-      updateWidth();
-    });
-
-    resizeObserver.observe(containerRef.current);
-
-    // Also measure after a delay to account for image loading
-    const timeoutId = setTimeout(updateWidth, 300);
-
-    return () => {
-      if (containerRef.current) {
-        resizeObserver.unobserve(containerRef.current);
-      }
-      clearTimeout(timeoutId);
-    };
-  }, [logos.length]);
-  // Animation effect
-
-  // Only duplicate if we have enough logos to make it worthwhile
-  const duplicatedLogos = logos.length > 2 ? [...logos, ...logos] : logos;
-
-  useEffect(() => {
-    if (
-      !isLoaded ||
-      isPaused ||
-      containerWidth === 0 ||
-      duplicatedLogos.length === 0
-    ) {
-      return;
-    }
-
-    let animationId: number;
-    let lastTime = performance.now();
-
-    const animate = (time: number) => {
-      const delta = time - lastTime;
-      lastTime = time;
-
-      setScrollPosition((prev) => {
-        // Speed adjustment - smaller = slower
-        const speed = Math.min(0.03, 30 / duplicatedLogos.length); // Adjust speed based on logo count
-        const newPosition = prev + delta * speed;
-        return newPosition >= containerWidth
-          ? newPosition - containerWidth
-          : newPosition;
-      });
-
-      animationId = requestAnimationFrame(animate);
-    };
-
-    animationId = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animationId);
-    };
-  }, [containerWidth, isPaused, duplicatedLogos.length, isLoaded]);
-
-  // Early return if no logos to prevent unnecessary rendering
-  if (!logos || logos.length === 0) {
-    return (
-      <section className="py-12 bg-gray-50 overflow-hidden">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="text-2xl font-bold text-center mb-8">{title}</h2>
-          <p className="text-muted-foreground">No client logos found.</p>
-        </div>
-      </section>
-    );
-  }
-
-  // Measure container width once all images are loaded
+  // Trajanje proporcionalno broju logotipa → konstantna brzina
+  const duration = `${Math.max(25, logos.length * 3.5)}s`;
 
   return (
-    <section className="py-12 bg-gray-50 overflow-hidden">
-      <div className="container mx-auto px-6">
-        <h2 className="text-2xl font-bold text-center mb-8">{title}</h2>
+    <section className="border-b border-slate-100 bg-slate-50/70 py-12 md:py-14">
+      <div className="container mx-auto px-4 md:px-6">
+        <p className="mb-8 text-center text-sm font-semibold uppercase tracking-[0.14em] text-slate-500">
+          {title}
+        </p>
 
-        <div
-          className="relative overflow-hidden"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-        >
+        <div className="pause-on-hover relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,#000_10%,#000_90%,transparent)]">
           <div
-            ref={containerRef}
-            className="flex items-center"
-            style={{
-              transform: isLoaded ? `translateX(-${scrollPosition}px)` : "none",
-              width: "fit-content",
-              // Subtle opacity transition when loaded
-              opacity: isLoaded ? 1 : 0.7,
-              transition: "opacity 0.5s ease-in",
-            }}
+            className="flex w-max animate-marquee"
+            style={{ "--marquee-duration": duration } as React.CSSProperties}
           >
-            {duplicatedLogos.map((logo, index) => (
-              <LogoItem key={`${logo.key}-${index}`} logo={logo} />
-            ))}
+            <LogoRow logos={logos} />
+            <LogoRow logos={logos} ariaHidden />
           </div>
         </div>
       </div>
     </section>
   );
 }
-
-// Export memoized version to prevent unnecessary re-renders
-export default memo(LogoCarouselClient);

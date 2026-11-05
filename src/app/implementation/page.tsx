@@ -8,7 +8,7 @@ import { ImplementationContent } from "@/components/sections/services/Implementa
  * and structured data for search engines.
  */
 export const metadata: Metadata = {
-  title: "Solution Implementation Services | Arctis",
+  title: "Solution Implementation Services",
   description:
     "Expert ARCHIBUS implementation services, from analysis and design to data migration, testing, and deployment. Achieve faster ROI with our proven methodology.",
   // Open Graph metadata for better social media sharing
@@ -38,8 +38,8 @@ export const metadata: Metadata = {
  */
 export default function ImplementationPage() {
   return (
-    <main>
+    <div>
       <ImplementationContent />
-    </main>
+    </div>
   );
 }

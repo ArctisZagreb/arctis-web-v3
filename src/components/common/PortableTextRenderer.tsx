@@ -23,7 +23,7 @@ const getImageUrl = (
     return null;
   }
   try {
-    return urlFor(source)?.auto("format").fit("max").url() ?? null;
+    return urlFor(source)?.width(1400).auto("format").fit("max").url() ?? null;
   } catch (error) {
     console.error("Error building image URL:", error, "Source:", source);
     return null;

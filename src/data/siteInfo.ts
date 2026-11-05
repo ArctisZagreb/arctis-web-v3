@@ -9,6 +9,16 @@ export const siteInfo = {
   phoneHref: "tel:+38513760480",
   email: "info@arctis.hr",
   emailHref: "mailto:info@arctis.hr",
+  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.arctis.hr",
+
+  // Službenik za zaštitu osobnih podataka (GDPR / DPO)
+  dataProtection: {
+    title: "Data Protection Officer",
+    email: "zastita.podataka@arctis.hr",
+    emailHref: "mailto:zastita.podataka@arctis.hr",
+    description:
+      "For any questions regarding the processing of your personal data or to exercise your rights under the GDPR (access, rectification, erasure, restriction, portability, objection), please contact our Data Protection Officer.",
+  },
 
   // Pravne informacije
   legal: {

@@ -117,6 +117,12 @@ const PrivacyPolicyContent = () => {
       </p>
       <ul>
         <li>
+          {siteInfo.dataProtection.title} (GDPR inquiries):{" "}
+          <a href={siteInfo.dataProtection.emailHref}>
+            {siteInfo.dataProtection.email}
+          </a>
+        </li>
+        <li>
           By email: <a href={siteInfo.emailHref}>{siteInfo.email}</a>
         </li>
         <li>

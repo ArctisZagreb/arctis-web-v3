@@ -2,25 +2,12 @@
 import React from "react";
 import { getClientLogos } from "@/lib/sanity/sanity.queries";
 import LogoCarouselClient from "./LogoCarouselClient";
-import { unstable_cache } from "next/cache";
-
-// Cache the getClientLogos function using Next.js unstable_cache
-// This will prevent redundant database calls
-const getCachedClientLogos = unstable_cache(
-  async () => {
-    return await getClientLogos();
-  },
-  ["client-logos"], // Cache key
-  {
-    revalidate: 3600, // Revalidate every hour (or adjust as needed)
-    tags: ["client-logos"], // Tag for manual revalidation
-  }
-);
 
 async function ClientLogos() {
   try {
-    // Use the cached function instead of direct database call
-    const processedLogos = await getCachedClientLogos();
+    // getClientLogos već koristi Next.js fetch cache (revalidate + tag),
+    // dodatni unstable_cache bi samo duplicirao cache zapise (ISR writes).
+    const processedLogos = await getClientLogos();
 
     return <LogoCarouselClient logos={processedLogos} />;
   } catch (error) {
