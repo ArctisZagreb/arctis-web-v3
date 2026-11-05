@@ -7,7 +7,7 @@ import { ProjectManagementContent } from "@/components/sections/services/Project
  * Enhances SEO with appropriate title, description and keywords
  */
 export const metadata: Metadata = {
-  title: "Project Management Services | Arctis",
+  title: "Project Management Services",
   description:
     "Expert project management for Corporate Real Estate, Asset Management, and Facility Management. Discover our Agile and Waterfall approaches.",
   keywords: [
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
  */
 export default function ProjectManagementPage() {
   return (
-    <main>
+    <div>
       <ProjectManagementContent />
-    </main>
+    </div>
   );
 }

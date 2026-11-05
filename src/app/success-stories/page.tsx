@@ -5,7 +5,7 @@ import { HeaderBackground } from "@/components/ui/header-background";
 import SuccessStoriesListClient from "@/components/post/SuccessStoriesListClient";
 
 export const metadata: Metadata = {
-  title: "Success Stories | Arctis",
+  title: "Success Stories",
   description:
     "Read about successful IWMS and ARCHIBUS implementations by Arctis d.o.o. Discover how we help clients achieve their facility management goals.",
 };
@@ -35,11 +35,11 @@ export default async function SuccessStoriesPage() {
       </section>
 
       {/* Content Area */}
-      <main className="flex-1 py-16 md:py-20 lg:py-24 bg-white">
+      <div className="flex-1 py-16 md:py-20 lg:py-24 bg-white">
         <div className="container mx-auto px-4 md:px-6">
           <SuccessStoriesListClient initialStories={allStories} />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

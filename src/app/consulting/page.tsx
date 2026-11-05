@@ -6,7 +6,7 @@ import { Metadata } from "next";
  * Metadata for SEO optimization
  */
 export const metadata: Metadata = {
-  title: "Strategic Consulting Services | Arctis",
+  title: "Strategic Consulting Services",
   description:
     "Expert consulting for Corporate Real Estate (CRE) and Facility Management (FM). We provide strategic planning, process optimization, technology advisory, and change management services.",
   keywords:
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
  */
 export default function ConsultingPage() {
   return (
-    <main>
+    <div>
       <ConsultingContent />
-    </main>
+    </div>
   );
 }

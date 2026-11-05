@@ -9,6 +9,7 @@ import {
   type StatItem,
   type PartnerItem,
 } from "@/data/partnersAndStatsData";
+import { SectionHeading } from "@/components/ui/section-heading";
 
 
 function useCountUp(target: number, isInView: boolean, duration = 2000) {
@@ -158,7 +159,7 @@ const PartnersAndStats = () => {
   return (
     <motion.section
       ref={sectionRef}
-      className="w-full py-16 md:py-24 lg:py-32 relative overflow-hidden"
+      className="w-full py-20 md:py-28 relative overflow-hidden"
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
     >
@@ -175,12 +176,11 @@ const PartnersAndStats = () => {
             visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
           }}
         >
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
-            {partnersAndStatsContent.title}
-          </h2>
-          <p className="mt-4 text-muted-foreground md:text-lg lg:text-xl max-w-2xl mx-auto">
-            {partnersAndStatsContent.subtitle}
-          </p>
+          <SectionHeading
+            eyebrow="Why Arctis"
+            title={partnersAndStatsContent.title}
+            description={partnersAndStatsContent.subtitle}
+          />
         </motion.div>
 
         <motion.div

@@ -7,6 +7,7 @@ import {
   getAllSuccessStoriesList,
 } from "@/lib/sanity/sanity.queries";
 import ResourcesPreviewClient from "./ResourcesPreviewClient";
+import { SectionHeading } from "@/components/ui/section-heading";
 
 /**
  * ResourcesPreview - Server Component
@@ -31,17 +32,15 @@ async function ResourcesPreview() {
   const resourcesToShow = combinedResources.slice(0, 3);
 
   return (
-    <section className="w-full py-16 md:py-24 lg:py-32 bg-white border-t">
+    <section className="w-full py-20 md:py-28 bg-white">
       <div className="container mx-auto px-4 md:px-6">
         {/* Section Header */}
-        <div className="mb-10 md:mb-14 text-center">
-          <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-gray-900">
-            Latest Resources
-          </h2>
-          <p className="mt-4 text-muted-foreground md:text-lg">
-            Stay updated with our latest news and success stories.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Insights"
+          title="Latest resources"
+          description="Stay updated with our latest news and success stories."
+          className="mb-12 md:mb-14"
+        />
 
         {/* Resources List (Client Component) */}
         <ResourcesPreviewClient resourcesToShow={resourcesToShow} />

@@ -27,7 +27,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/90 backdrop-blur-lg supports-[backdrop-filter]:bg-white/80">
       <div className="container flex h-16 items-center mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
@@ -44,19 +44,20 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex flex-1 justify-end">
+        <div className="hidden md:flex flex-1 items-center justify-end gap-2">
           <NavigationMenu>
             <NavigationMenuList>
-              {headerNavLinks.map((navItem) => (
+              {headerNavLinks
+                .filter((navItem) => navItem.href !== "/contact")
+                .map((navItem) => (
                 <NavigationMenuItem key={navItem.label}>
                   {!navItem.sublinks ? (
-                    <Link href={navItem.href} legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
-                      >
-                        {navItem.label}
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink
+                      asChild
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      <Link href={navItem.href}>{navItem.label}</Link>
+                    </NavigationMenuLink>
                   ) : (
                     <>
                       <NavigationMenuTrigger>
@@ -81,6 +82,9 @@ const Header = () => {
               ))}
             </NavigationMenuList>
           </NavigationMenu>
+          <Button asChild size="sm" className="ml-2 rounded-full px-5">
+            <Link href="/contact">Contact us</Link>
+          </Button>
         </div>
 
         <div className="flex items-center md:hidden ml-auto">
