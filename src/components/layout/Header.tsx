@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,21 +16,48 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react";
 import { headerNavLinks } from "@/data/navigation";
 import ListItem from "./ListItem";
+import MobileMenu from "./MobileMenu";
+// Statički import: URL dobiva hash sadržaja, pa se izmjena loga odmah vidi
+import logoBrand from "../../../public/assets/logo/arctis-logo-brand.png";
 
 const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  // Tanka linija napretka čitanja na dnu headera
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 28,
+    restDelta: 0.001,
+  });
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/90 backdrop-blur-lg supports-[backdrop-filter]:bg-white/80">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b bg-white/90 backdrop-blur-lg transition-shadow duration-300 supports-[backdrop-filter]:bg-white/80",
+        scrolled
+          ? "border-slate-200/80 shadow-[0_4px_24px_-12px_rgba(15,23,42,0.25)]"
+          : "border-transparent",
+      )}
+    >
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"
+        style={{ scaleX: progress }}
+      />
       <div className="container flex h-16 items-center mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
@@ -35,16 +65,16 @@ const Header = () => {
           className="mr-6 flex items-center space-x-2 flex-shrink-0"
         >
           <Image
-            src="/assets/logo/arctis-logo-blue.png"
-            alt="Arctis Logo"
-            width={90}
-            height={30}
+            src={logoBrand}
+            alt="Arctis"
             priority
+            sizes="123px"
+            className="h-11 w-auto"
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+        <div className="hidden lg:flex flex-1 items-center justify-end gap-2">
           <NavigationMenu>
             <NavigationMenuList>
               {headerNavLinks
@@ -54,17 +84,30 @@ const Header = () => {
                   {!navItem.sublinks ? (
                     <NavigationMenuLink
                       asChild
-                      className={navigationMenuTriggerStyle()}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        isActive(navItem.href) && "text-blue-700",
+                      )}
                     >
-                      <Link href={navItem.href}>{navItem.label}</Link>
+                      <Link
+                        href={navItem.href}
+                        aria-current={isActive(navItem.href) ? "page" : undefined}
+                      >
+                        {navItem.label}
+                      </Link>
                     </NavigationMenuLink>
                   ) : (
                     <>
-                      <NavigationMenuTrigger>
+                      <NavigationMenuTrigger
+                        className={cn(
+                          navItem.sublinks.some((s) => isActive(s.href)) &&
+                            "text-blue-700",
+                        )}
+                      >
                         {navItem.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                        <ul className="grid gap-1 p-3 md:w-[420px]">
                           {navItem.sublinks.map((subItem) => (
                             <ListItem
                               key={subItem.label}
@@ -87,68 +130,8 @@ const Header = () => {
           </Button>
         </div>
 
-        <div className="flex items-center md:hidden ml-auto">
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[300px] sm:w-[400px] [&>button:first-of-type]:hidden"
-            >
-              <div className="flex justify-between items-center mb-6">
-                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Image
-                    src="/assets/logo/arctis-logo-blue.png"
-                    alt="Arctis Logo"
-                    width={80}
-                    height={26}
-                  />
-                </Link>
-                <SheetClose asChild>
-                  <Button variant="ghost" size="icon">
-                    <X className="h-5 w-5" />
-                    <span className="sr-only">Close menu</span>
-                  </Button>
-                </SheetClose>
-              </div>
-              <nav className="flex flex-col space-y-1">
-                {headerNavLinks.map((navItem) => (
-                  <div key={navItem.label}>
-                    {!navItem.sublinks ? (
-                      <SheetClose asChild>
-                        <Link
-                          href={navItem.href}
-                          className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent"
-                        >
-                          {navItem.label}
-                        </Link>
-                      </SheetClose>
-                    ) : (
-                      <div className="pl-4">
-                        <span className="block px-3 py-1 text-base font-medium text-muted-foreground">
-                          {navItem.label}
-                        </span>
-                        {navItem.sublinks.map((sub) => (
-                          <SheetClose asChild key={sub.label}>
-                            <Link
-                              href={sub.href}
-                              className="block pl-6 pr-3 py-1 rounded-md text-base font-medium text-foreground hover:bg-accent"
-                            >
-                              {sub.label}
-                            </Link>
-                          </SheetClose>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+        <div className="flex items-center lg:hidden ml-auto">
+          <MobileMenu isActive={isActive} />
         </div>
       </div>
     </header>

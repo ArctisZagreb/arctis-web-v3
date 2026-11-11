@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { NavigationMenuLink } from "@/components/ui/navigation-menu";
 
@@ -23,14 +24,17 @@ const ListItem = React.forwardRef<React.ElementRef<"a">, ListItemProps>(
             href={href}
             ref={ref}
             className={cn(
-              "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+              "group/item block select-none rounded-lg p-3 no-underline outline-none transition-colors hover:bg-slate-50 focus:bg-slate-50",
               className
             )}
             {...props}
           >
-            <div className="text-sm font-medium leading-none">{title}</div>
+            <div className="flex items-center justify-between gap-3 text-sm font-semibold text-slate-900 group-hover/item:text-blue-700">
+              {title}
+              <ArrowRight className="h-3.5 w-3.5 -translate-x-1 text-blue-600 opacity-0 transition-all duration-200 group-hover/item:translate-x-0 group-hover/item:opacity-100" />
+            </div>
             {/* Djeca komponente se koriste za prikaz opisa */}
-            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            <p className="mt-1 line-clamp-2 text-sm leading-snug text-slate-500">
               {children}
             </p>
           </Link>

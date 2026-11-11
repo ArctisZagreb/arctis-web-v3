@@ -17,7 +17,9 @@ import {
   Shuffle,
   Users,
 } from "lucide-react";
-import SimpleCallToAction from "@/components/sections/SimpleCallToAction"; // Assuming CTA component path
+import SimpleCallToAction from "@/components/sections/SimpleCallToAction";
+import { PageHero, HeroAccent } from "@/components/ui/page-hero";
+import { ServiceHeroActions } from "./ServiceHeroActions";
 
 // Reusable InfoCard component (similar to the one from ProjectManagement)
 const InfoCard: React.FC<{ children: React.ReactNode; className?: string }> = ({
@@ -32,38 +34,20 @@ const InfoCard: React.FC<{ children: React.ReactNode; className?: string }> = ({
 );
 
 export const ImplementationContent: React.FC = () => {
-  // --- Unsplash Image URL for Implementation (Example - Choose one) ---
-  // Option 1: Server room / tech setup
-  // const heroImageUrl =
-  //    "https://images.unsplash.com/photo-1580894742597-87bc8789db3d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80";
-  // Option 2: Abstract network/data flow
-  const heroImageUrl =
-    "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80";
-  // Option 3: Collaborative coding/planning screen
-  // const heroImageUrl = "https://images.unsplash.com/photo-1604964432806-254d07c11f32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80";
-
   return (
     <div className="bg-background text-foreground">
       {/* Hero Section */}
-      <section
-        className="relative py-24 md:py-32 lg:py-40 overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url('${heroImageUrl}')` }}
+      <PageHero
+        eyebrow="Implementation"
+        title={
+          <>
+            Seamless solution <HeroAccent>implementation</HeroAccent>
+          </>
+        }
+        description="Leveraging modern technologies and industry best practices, we deliver faster deployments and reliable returns on your technology investment."
       >
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/80 dark:from-background/60 dark:via-background/70 dark:to-background/80 z-0"
-          aria-hidden="true"
-        ></div>
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl mb-4">
-            Seamless Solution Implementation
-          </h1>
-          <p className="mt-4 text-lg leading-8 text-gray-200 dark:text-gray-300 max-w-2xl mx-auto">
-            Leveraging modern technologies and industry best practices, we
-            deliver faster deployments and reliable returns on your technology
-            investment.
-          </p>
-        </div>
-      </section>
+        <ServiceHeroActions />
+      </PageHero>
 
       {/* Introduction Section */}
       <section className="py-16 lg:py-24">

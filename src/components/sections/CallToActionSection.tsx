@@ -4,8 +4,9 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
 import { ctaSectionData } from "@/data/pageContent";
+import { siteInfo } from "@/data/siteInfo";
 import { SectionHeading } from "@/components/ui/section-heading";
 
 const containerVariants = {
@@ -70,6 +71,38 @@ const CallToActionSection = () => {
             );
           })}
         </motion.div>
+
+        {/* Izravan kontakt */}
+        <div className="mx-auto mt-6 flex max-w-5xl flex-col items-start gap-5 rounded-2xl border border-white/10 bg-gradient-to-r from-blue-600/20 via-white/[0.04] to-cyan-500/10 p-6 md:flex-row md:items-center md:justify-between md:p-7">
+          <div>
+            <p className="text-lg font-semibold tracking-tight">
+              Prefer to talk it through?
+            </p>
+            <div className="mt-2 flex flex-col gap-x-6 gap-y-1.5 text-sm text-slate-300 sm:flex-row">
+              <a
+                href={siteInfo.emailHref}
+                className="inline-flex items-center gap-2 hover:text-white"
+              >
+                <Mail className="h-4 w-4 text-cyan-300" />
+                {siteInfo.email}
+              </a>
+              <a
+                href={siteInfo.phoneHref}
+                className="inline-flex items-center gap-2 hover:text-white"
+              >
+                <Phone className="h-4 w-4 text-cyan-300" />
+                {siteInfo.phone}
+              </a>
+            </div>
+          </div>
+          <Link
+            href="/contact"
+            className="group inline-flex h-12 shrink-0 items-center gap-1.5 rounded-full bg-white px-6 text-sm font-semibold text-slate-900 transition-colors hover:bg-blue-50"
+          >
+            Talk to an expert
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Link>
+        </div>
       </div>
     </section>
   );
