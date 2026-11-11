@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -25,9 +28,41 @@ import ListItem from "./ListItem";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+
+  // Tanka linija napretka čitanja na dnu headera
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 28,
+    restDelta: 0.001,
+  });
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/90 backdrop-blur-lg supports-[backdrop-filter]:bg-white/80">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b bg-white/90 backdrop-blur-lg transition-shadow duration-300 supports-[backdrop-filter]:bg-white/80",
+        scrolled
+          ? "border-slate-200/80 shadow-[0_4px_24px_-12px_rgba(15,23,42,0.25)]"
+          : "border-transparent",
+      )}
+    >
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"
+        style={{ scaleX: progress }}
+      />
       <div className="container flex h-16 items-center mx-auto px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
@@ -44,7 +79,7 @@ const Header = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex flex-1 items-center justify-end gap-2">
+        <div className="hidden lg:flex flex-1 items-center justify-end gap-2">
           <NavigationMenu>
             <NavigationMenuList>
               {headerNavLinks
@@ -54,17 +89,30 @@ const Header = () => {
                   {!navItem.sublinks ? (
                     <NavigationMenuLink
                       asChild
-                      className={navigationMenuTriggerStyle()}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        isActive(navItem.href) && "text-blue-700",
+                      )}
                     >
-                      <Link href={navItem.href}>{navItem.label}</Link>
+                      <Link
+                        href={navItem.href}
+                        aria-current={isActive(navItem.href) ? "page" : undefined}
+                      >
+                        {navItem.label}
+                      </Link>
                     </NavigationMenuLink>
                   ) : (
                     <>
-                      <NavigationMenuTrigger>
+                      <NavigationMenuTrigger
+                        className={cn(
+                          navItem.sublinks.some((s) => isActive(s.href)) &&
+                            "text-blue-700",
+                        )}
+                      >
                         {navItem.label}
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                        <ul className="grid gap-1 p-3 md:w-[420px]">
                           {navItem.sublinks.map((subItem) => (
                             <ListItem
                               key={subItem.label}
@@ -87,7 +135,7 @@ const Header = () => {
           </Button>
         </div>
 
-        <div className="flex items-center md:hidden ml-auto">
+        <div className="flex items-center lg:hidden ml-auto">
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">

@@ -1,6 +1,6 @@
 import React from "react";
 import { Metadata } from "next";
-import { HeaderBackground } from "@/components/ui/header-background";
+import { PageHero } from "@/components/ui/page-hero";
 // Removing unused icons
 // import { Calculator, Info } from "lucide-react";
 
@@ -14,17 +14,12 @@ export default function RoiInfoPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-20 md:py-28 lg:py-36 text-center bg-gradient-to-br from-blue-50 via-white to-indigo-100 overflow-hidden">
-        <HeaderBackground />
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-4">
-            ROI Calculator Methodology
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Understanding the calculations behind our Archibus savings estimate.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="ROI methodology"
+        title="ROI calculator methodology"
+        description="Understanding the calculations behind our Archibus savings estimate."
+        size="compact"
+      />
 
       {/* Main Content */}
       <div className="flex-1 bg-white py-16 md:py-24">

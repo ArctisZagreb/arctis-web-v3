@@ -10,7 +10,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { siteInfo, contactPageContent } from "@/data/siteInfo";
-import { HeaderBackground } from "@/components/ui/header-background";
+import { PageHero } from "@/components/ui/page-hero";
+import { Button } from "@/components/ui/button";
 
 // Page metadata
 export const metadata: Metadata = {
@@ -29,17 +30,33 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative py-20 md:py-28 lg:py-32 text-center bg-gradient-to-br from-blue-50 via-white to-indigo-100 overflow-hidden">
-        <HeaderBackground />
-        <div className="container mx-auto px-4 md:px-6 relative z-10">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 mb-4">
-            {contactPageContent.title}
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            {contactPageContent.subtitle}
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Contact"
+        title={contactPageContent.title}
+        description={contactPageContent.subtitle}
+      >
+        <Button
+          asChild
+          size="lg"
+          className="h-12 bg-blue-500 px-6 text-white shadow-lg shadow-blue-500/25 hover:bg-blue-400"
+        >
+          <a href={siteInfo.emailHref}>
+            <Mail className="mr-1 h-4 w-4" />
+            {siteInfo.email}
+          </a>
+        </Button>
+        <Button
+          asChild
+          size="lg"
+          variant="outline"
+          className="h-12 border-white/20 bg-white/5 px-6 text-white hover:bg-white/10 hover:text-white"
+        >
+          <a href={siteInfo.phoneHref}>
+            <Phone className="mr-1 h-4 w-4" />
+            {siteInfo.phone}
+          </a>
+        </Button>
+      </PageHero>
 
       {/* Main Content */}
       <div className="flex-1 py-16 md:py-24 bg-white">

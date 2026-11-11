@@ -12,6 +12,8 @@ import {
   Lightbulb,
 } from "lucide-react";
 import SimpleCallToAction from "@/components/sections/SimpleCallToAction";
+import { PageHero, HeroAccent } from "@/components/ui/page-hero";
+import { ServiceHeroActions } from "./ServiceHeroActions";
 
 /**
  * Reusable card component for visually grouping content
@@ -74,35 +76,20 @@ const KEY_ACTIVITIES = [
  * Displays comprehensive information about project management approaches and methodologies
  */
 export const ProjectManagementContent: React.FC = () => {
-  // Hero section background image URL
-  const heroImageUrl =
-    "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80";
-
   return (
     <div className="bg-background text-foreground">
-      {/* Hero Section with background image and overlay */}
-      <section
-        className="relative py-24 md:py-32 lg:py-40 overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url('${heroImageUrl}')` }}
+      {/* Hero Section */}
+      <PageHero
+        eyebrow="Project management"
+        title={
+          <>
+            Project management <HeroAccent>excellence</HeroAccent>
+          </>
+        }
+        description="From initial deployment and day-to-day optimization to big-picture thinking and proactive strategizing, our experts turn vision into reality."
       >
-        {/* Overlay gradient for text readability */}
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/60 to-black/70 dark:from-background/60 dark:via-background/70 dark:to-background/80 z-0"
-          aria-hidden="true"
-        ></div>
-
-        {/* Content Container positioned above overlay */}
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl mb-4">
-            Project Management Excellence
-          </h1>
-          <p className="mt-4 text-lg leading-8 text-gray-200 dark:text-gray-300 max-w-2xl mx-auto">
-            From initial deployment and day-to-day optimization to big-picture
-            thinking and proactive strategizing, our experts turn vision into
-            reality.
-          </p>
-        </div>
-      </section>
+        <ServiceHeroActions />
+      </PageHero>
 
       {/* Introduction Section - provides overview of services */}
       <section className="py-16 lg:py-24">

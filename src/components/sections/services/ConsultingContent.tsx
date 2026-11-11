@@ -20,6 +20,8 @@ import {
   Search,
 } from "lucide-react";
 import SimpleCallToAction from "@/components/sections/SimpleCallToAction";
+import { PageHero, HeroAccent } from "@/components/ui/page-hero";
+import { ServiceHeroActions } from "./ServiceHeroActions";
 import { cn } from "@/lib/utils";
 
 /**
@@ -40,10 +42,6 @@ const InfoCard: React.FC<{
 );
 
 export const ConsultingContent: React.FC = () => {
-  // Hero section background image
-  const heroImageUrl =
-    "https://images.unsplash.com/photo-1517048676732-d65bc937f952?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80";
-
   // Engagement method data structure for easy maintenance
   const engagementMethods = [
     {
@@ -92,25 +90,17 @@ export const ConsultingContent: React.FC = () => {
   return (
     <div className="bg-background text-foreground">
       {/* Hero Section */}
-      <section
-        className="relative py-24 md:py-32 lg:py-40 overflow-hidden bg-cover bg-center"
-        style={{ backgroundImage: `url('${heroImageUrl}')` }}
+      <PageHero
+        eyebrow="Consulting"
+        title={
+          <>
+            Strategic consulting <HeroAccent>expertise</HeroAccent>
+          </>
+        }
+        description="Guiding you to do the right things, the right way. We partner with you to navigate complexity and achieve strategic objectives in CRE & FM."
       >
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/80 dark:from-background/60 dark:via-background/70 dark:to-background/80 z-0"
-          aria-hidden="true"
-        ></div>
-        <div className="relative z-10 container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl mb-4">
-            Strategic Consulting Expertise
-          </h1>
-          <p className="mt-4 text-lg leading-8 text-gray-200 dark:text-gray-300 max-w-2xl mx-auto">
-            Guiding you to do the right things, the right way. We partner with
-            you to navigate complexity and achieve strategic objectives in CRE &
-            FM.
-          </p>
-        </div>
-      </section>
+        <ServiceHeroActions />
+      </PageHero>
 
       {/* Introduction Section */}
       <section className="py-16 lg:py-24">
