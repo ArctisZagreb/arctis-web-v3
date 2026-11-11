@@ -1,369 +1,338 @@
 import React from "react";
 import { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { PageHero } from "@/components/ui/page-hero";
-// Removing unused icons
-// import { Calculator, Info } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  AREAS,
+  ASSUMPTIONS,
+  DEFAULT_SETTINGS,
+  HORIZON_YEARS,
+  RAMP_UP,
+  SPACE_SAVINGS_CAP_PCT,
+  type AreaKey,
+} from "@/lib/roi/model";
 
 export const metadata: Metadata = {
   title: "ROI Calculator Methodology",
   description:
-    "Learn how the Arctis Archibus ROI calculator works, the formulas it uses, and the assumptions behind the savings estimates.",
+    "How the Arctis ARCHIBUS ROI calculator works: the formulas, improvement rates and sources behind every figure, and what the estimate does not include.",
+  alternates: { canonical: "/roi-info" },
 };
+
+// Formule po području — ista logika kao u src/lib/roi/model.ts
+const FORMULAS: Record<AreaKey, { inputs: string[]; base: string }> = {
+  space: {
+    inputs: [
+      "Total managed area (m²)",
+      "Annual cost per m² (rent or ownership, service charges, cleaning, utilities)",
+      "Share of space that is underused (%)",
+    ],
+    base: "Area × cost per m² × underused share",
+  },
+  maintenance: {
+    inputs: [
+      "In-house maintenance staff (FTE) and annual cost per employee",
+      "Annual spend on external contractors and materials",
+      "Share of work that is reactive (%)",
+    ],
+    base: "(Staff × cost per employee + external spend) × reactive share",
+  },
+  productivity: {
+    inputs: [
+      "FM and real-estate administration staff (FTE) and annual cost per employee",
+      "Share of time spent on manual work (%)",
+    ],
+    base: "Staff × cost per employee × manual share",
+  },
+  energy: {
+    inputs: ["Annual energy cost"],
+    base: "Annual energy cost",
+  },
+  lease: {
+    inputs: ["Annual lease and service-charge payments"],
+    base: "Annual lease payments",
+  },
+  assets: {
+    inputs: ["Annual spend on replacing furniture and equipment"],
+    base: "Annual replacement spend",
+  },
+};
+
+const ramp = RAMP_UP.map((r) => `${Math.round(r * 100)}%`);
 
 export default function RoiInfoPage() {
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
       <PageHero
         eyebrow="ROI methodology"
-        title="ROI calculator methodology"
-        description="Understanding the calculations behind our Archibus savings estimate."
+        title="How the ROI calculator works"
+        description="The formulas, improvement rates and sources behind every figure, and what the estimate deliberately leaves out."
         size="compact"
-      />
+      >
+        <Button
+          asChild
+          size="lg"
+          className="group h-12 bg-blue-500 px-6 text-white shadow-lg shadow-blue-500/25 hover:bg-blue-400"
+        >
+          <Link href="/roi">
+            Open the calculator
+            <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </Button>
+      </PageHero>
 
-      {/* Main Content */}
-      <div className="flex-1 bg-white py-16 md:py-24">
-        <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-          <article className="prose prose-lg lg:prose-xl prose-blue max-w-none text-gray-800">
-            <p className="lead text-xl text-gray-600 mb-8">
-              Here we detail the principles, formulas, and assumptions our
-              interactive Return on Investment (ROI) calculator uses to provide
-              you with an estimate of potential savings by implementing the
-              Archibus solution.
-            </p>
-
-            <h2 id="purpose">1. Calculator Purpose</h2>
-            <p>
-              This calculator is designed as a tool to help potential clients
-              (medium/large companies, hotels, organizations) estimate the
-              <strong>approximate annual financial savings</strong> they could
-              achieve by transitioning from their current methods of managing
-              real estate, space, and maintenance to an integrated system like
-              Archibus.
-            </p>
-            <p>
-              The goal is not to provide an absolutely precise calculation (as
-              this depends on many specific factors), but rather to offer a
-              <strong>realistic potential estimate</strong> based on the data
-              entered by the client and on
-              <strong>average improvement factors</strong> observed among
-              existing Archibus users.
+      <div className="flex-1 bg-white py-14 md:py-20">
+        <div className="container mx-auto max-w-4xl px-4 md:px-6">
+          <article className="prose prose-slate max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-h2:mt-14 prose-a:text-blue-700">
+            <p className="lead">
+              The calculator estimates what an integrated workplace management
+              system such as ARCHIBUS could save your organisation, and how
+              that compares with the cost of implementing it. It is built to be
+              checked: every rate is listed here with its source, and you can
+              download the full model as an Excel file.
             </p>
 
-            <h2 id="principle">2. Basic Operating Principle</h2>
+            <h2 id="principle">1. The principle</h2>
             <p>
-              The calculator works by identifying
-              <strong>hidden costs and inefficiencies</strong> in the
-              client&apos;s current mode of operation (without Archibus) and
-              applying a percentage improvement (savings) that Archibus
-              typically brings to these areas.
+              For each area you include, the calculator first works out the
+              cost that can realistically be reduced (the{" "}
+              <em>addressable cost</em>), then applies an improvement rate:
             </p>
-            <div className="my-4 p-4 bg-gray-50 border border-gray-200 rounded-md font-mono text-sm text-gray-700">
-              <p className="font-semibold mb-1">Formula (Conceptual):</p>
-              <p>
-                <code>
-                  Estimated Annual Savings = Σ ( Estimated Cost of Inefficiency
-                  * Improvement Factor with Archibus (%) )
-                </code>
-              </p>
-              <p className="text-xs mt-2">
-                <em>
-                  Where &ldquo;Σ&rdquo; denotes the sum of savings from all
-                  included categories (Space, Maintenance, Administration,
-                  Optional).
-                </em>
-              </p>
-            </div>
-
-            <h2 id="categories">3. Calculation Categories and Formulas</h2>
+            <pre className="not-prose overflow-x-auto rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-800">
+              <code>
+                annual saving = addressable cost × improvement rate
+              </code>
+            </pre>
             <p>
-              The calculator collects data through several key sections. The
-              user can select (toggle on/off) which sections to include in the
-              calculation.
+              Each rate has three values, so results are shown as a{" "}
+              <strong>conservative</strong>, <strong>expected</strong> and{" "}
+              <strong>optimistic</strong> scenario rather than a single number.
             </p>
 
-            <h3 id="space">A) Space Management & Utilization</h3>
-            <p>
-              <strong>Savings Goal:</strong> Reduce costs associated with unused
-              or sub-optimally utilized space. Archibus helps identify such
-              spaces and make decisions regarding their repurposing, lease
-              termination, or better allocation.
-            </p>
-            <p>
-              <strong>Required Client Inputs:</strong>
-            </p>
-            <ul className="list-disc list-inside my-2">
-              <li>Total Managed Area (m²): The total area they manage.</li>
+            <h2 id="areas">2. Savings areas</h2>
+          </article>
+
+          <div className="mt-6 space-y-5">
+            {AREAS.map((area, index) => {
+              const a = ASSUMPTIONS[area.key];
+              const f = FORMULAS[area.key];
+              return (
+                <section
+                  key={area.key}
+                  id={area.key}
+                  className="scroll-mt-24 rounded-2xl border border-slate-200 p-6 md:p-7"
+                >
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <span
+                      aria-hidden="true"
+                      className="h-3 w-3 rounded-full"
+                      style={{ backgroundColor: area.color }}
+                    />
+                    <h3 className="text-xl font-semibold tracking-tight text-slate-900">
+                      <span className="mr-2 font-mono text-sm font-medium text-slate-400">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {area.label}
+                    </h3>
+                    <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                      {area.savingType === "hard"
+                        ? "Direct cost saving"
+                        : "Released capacity"}
+                    </span>
+                  </div>
+
+                  <p className="mt-3 text-[15px] leading-relaxed text-slate-600">
+                    {area.how}
+                  </p>
+
+                  <div className="mt-5 grid gap-6 md:grid-cols-2">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">
+                        What you enter
+                      </p>
+                      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-600">
+                        {f.inputs.map((input) => (
+                          <li key={input}>{input}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">
+                        Formula
+                      </p>
+                      <p className="mt-2 rounded-lg bg-slate-50 p-3 font-mono text-[13px] leading-relaxed text-slate-800">
+                        {f.base}
+                        <br />× improvement rate
+                      </p>
+                    </div>
+                  </div>
+
+                  <dl className="mt-5 grid grid-cols-3 gap-3">
+                    {(["conservative", "expected", "optimistic"] as const).map(
+                      (key) => (
+                        <div
+                          key={key}
+                          className="rounded-xl border border-slate-200 p-3 text-center"
+                        >
+                          <dt className="text-xs capitalize text-slate-500">
+                            {key}
+                          </dt>
+                          <dd className="mt-0.5 text-xl font-semibold tabular-nums text-slate-900">
+                            {a.rates[key]}%
+                          </dd>
+                        </div>
+                      ),
+                    )}
+                  </dl>
+
+                  <p className="mt-4 text-sm leading-relaxed text-slate-600">
+                    <span className="font-medium text-slate-900">
+                      {a.kind === "benchmark"
+                        ? "Published benchmark. "
+                        : "Arctis estimate. "}
+                    </span>
+                    Applied to the {a.appliesTo}. {a.basis}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+                    {a.sourceUrl && (
+                      <a
+                        href={a.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 font-medium text-blue-700 underline-offset-2 hover:underline"
+                      >
+                        {a.sourceLabel}
+                        <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    )}
+                    <Link
+                      href={`/archibus?product=${area.archibusSlug}#solutions`}
+                      className="inline-flex items-center gap-1 font-medium text-blue-700 underline-offset-2 hover:underline"
+                    >
+                      ARCHIBUS {area.archibusArea}
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+
+          <article className="prose prose-slate mt-4 max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-h2:mt-14 prose-a:text-blue-700">
+            <h2 id="safeguards">3. Safeguards against overstating</h2>
+            <ul>
               <li>
-                Average Annual Cost per m² (€/m²): The cost of ownership/lease
-                and upkeep per square meter.
+                <strong>Space cap.</strong> Space savings never exceed{" "}
+                {SPACE_SAVINGS_CAP_PCT}% of your total space cost, however much
+                space you mark as underused. This keeps the result within
+                Gartner&apos;s 10–15% benchmark for savings from better space
+                use.
               </li>
               <li>
-                Estimated Percentage of Unused Space (%): How much space is not
-                fully functional.
-              </li>
-            </ul>
-            <p>
-              <strong>Formula Logic:</strong>
-            </p>
-            <blockquote className="border-l-4 border-blue-300 pl-4 py-2 my-3 bg-blue-50/50 text-sm">
-              <ol className="list-decimal list-inside space-y-1">
-                <li>
-                  Calculate <em>Total Annual Cost of Unused Space</em>: <br />
-                  <code>
-                    (Total Area * % Unused Space / 100) * Average Cost per m²
-                  </code>
-                </li>
-                <li>
-                  Calculate <em>Estimated Savings</em>: <br />
-                  <code>
-                    (Total Annual Cost of Unused Space) * Utilization
-                    Improvement Factor (%)
-                  </code>
-                </li>
-              </ol>
-              <p className="mt-2 text-xs">
-                <em>
-                  Utilization Improvement Factor (Our assumption, e.g., 15%):
-                </em>
-                Represents the percentage of the cost of unused space that can
-                realistically be saved or repurposed using Archibus tools.
-              </p>
-            </blockquote>
-
-            <h3 id="maintenance">B) Maintenance Management</h3>
-            <p>
-              <strong>Savings Goal:</strong> Reduce the costs of reactive
-              (emergency) maintenance, which is more expensive than planned
-              maintenance, and optimize the costs of external contractors.
-              Archibus enables better planning, work order tracking, and cost
-              analysis.
-            </p>
-            <p>
-              <strong>Required Client Inputs:</strong>
-            </p>
-            <ul className="list-disc list-inside my-2">
-              <li>Number of Maintenance Staff: Internal team.</li>
-              <li>
-                Average Annual Gross Salary of Maintenance Staff (€): Cost of
-                the internal team.
+                <strong>Ramp-up.</strong> Benefits do not start on day one. The
+                model counts {ramp[0]} of the full annual saving in year 1,{" "}
+                {ramp[1]} in year 2 and {ramp[2]} from year 3.
               </li>
               <li>
-                Estimated Percentage of Time on Reactive Maintenance (%): How
-                much time is spent on &ldquo;firefighting&rdquo;.
+                <strong>Direct savings and released capacity are kept apart.</strong>{" "}
+                Productivity gains are staff time freed for other work, not a
+                reduction in payroll, so they are reported separately from
+                direct cost savings.
               </li>
               <li>
-                Annual Cost of External Maintenance Services (€): Amount paid to
-                third-party companies.
-              </li>
-            </ul>
-            <p>
-              <strong>Formula Logic:</strong> Consists of two parts:
-            </p>
-            <blockquote className="border-l-4 border-emerald-300 pl-4 py-2 my-3 bg-emerald-50/50 text-sm">
-              <p className="font-semibold">
-                1. Savings on Internal Maintenance:
-              </p>
-              <ul className="list-disc list-inside space-y-1 pl-2 mb-2">
-                <li>
-                  Calculate <em>Cost of Time Spent on Reactive Maintenance</em>:
-                  <br />
-                  <code>
-                    (Number of Staff * Average Salary) * (% Time on Reactive /
-                    100)
-                  </code>
-                </li>
-                <li>
-                  Calculate <em>Estimated Savings</em>: <br />
-                  <code>
-                    (Cost of Time Spent on Reactive Maintenance) * Reactive
-                    Maintenance Reduction Factor (%)
-                  </code>
-                </li>
-              </ul>
-              <p className="text-xs mb-3">
-                <em>
-                  Reactive Maintenance Reduction Factor (Our assumption, e.g.,
-                  25%):
-                </em>
-                The percentage reduction in inefficient reactive work achieved
-                by shifting to planned maintenance.
-              </p>
-
-              <p className="font-semibold">
-                2. Savings on External Maintenance:
-              </p>
-              <ul className="list-disc list-inside space-y-1 pl-2 mb-2">
-                <li>
-                  Calculate <em>Estimated Savings</em>: <br />
-                  <code>
-                    (Annual Cost of External Services) * External Cost
-                    Optimization Factor (%)
-                  </code>
-                </li>
-              </ul>
-              <p className="text-xs mb-3">
-                <em>
-                  External Cost Optimization Factor (Our assumption, e.g., 10%):
-                </em>
-                The percentage of savings achievable through better control and
-                analysis of external services.
-              </p>
-              <p className="font-semibold">
-                3. Total Savings (Maintenance) = Savings on Internal + Savings
-                on External.
-              </p>
-            </blockquote>
-
-            <h3 id="admin">C) Administrative Efficiency</h3>
-            <p>
-              <strong>Savings Goal:</strong> Reduce the time (and thus cost)
-              that administrative staff spend on manual, repetitive tasks like
-              data entry, information retrieval, and report generation. Archibus
-              automates many of these processes.
-            </p>
-            <p>
-              <strong>Required Client Inputs:</strong>
-            </p>
-            <ul className="list-disc list-inside my-2">
-              <li>
-                Number of Staff in Real Estate/FM Administration: Personnel
-                performing these tasks.
-              </li>
-              <li>
-                Average Annual Gross Salary of Admin Staff (€): Cost of these
-                staff members.
-              </li>
-              <li>
-                Estimated Percentage of Time on Manual Work (%): How much time
-                is spent on non-automated tasks.
-              </li>
-            </ul>
-            <p>
-              <strong>Formula Logic:</strong>
-            </p>
-            <blockquote className="border-l-4 border-amber-300 pl-4 py-2 my-3 bg-amber-50/50 text-sm">
-              <ol className="list-decimal list-inside space-y-1">
-                <li>
-                  Calculate <em>Cost of Time Spent on Manual Work</em>: <br />
-                  <code>
-                    (Number of Admin Staff * Average Salary) * (% Time on Manual
-                    Work / 100)
-                  </code>
-                </li>
-                <li>
-                  Calculate <em>Estimated Savings</em>: <br />
-                  <code>
-                    (Cost of Time Spent on Manual Work) * Manual Work Reduction
-                    Factor (%)
-                  </code>
-                </li>
-              </ol>
-              <p className="mt-2 text-xs">
-                <em>
-                  Manual Work Reduction Factor (Our assumption, e.g., 30%):
-                </em>
-                The percentage reduction in manual work achieved through
-                automation and data centralization in Archibus.
-              </p>
-            </blockquote>
-
-            <h3 id="optional">D) Optional: Energy & Assets</h3>
-            <p>
-              <strong>Savings Goal:</strong> Identify opportunities to reduce
-              energy consumption through better monitoring and analysis (if
-              supported by Archibus modules) and reduce costs associated with
-              loss or inefficient management of assets (furniture, equipment).
-            </p>
-            <p>
-              <strong>Required Client Inputs:</strong>
-            </p>
-            <ul className="list-disc list-inside my-2">
-              <li>Estimated Annual Energy Cost (€).</li>
-              <li>Estimated Value of Assets (€).</li>
-            </ul>
-            <p>
-              <strong>Formula Logic:</strong>
-            </p>
-            <blockquote className="border-l-4 border-violet-300 pl-4 py-2 my-3 bg-violet-50/50 text-sm">
-              <p className="font-semibold">1. Savings on Energy:</p>
-              <ul className="list-disc list-inside space-y-1 pl-2 mb-2">
-                <li>
-                  Calculate <em>Estimated Savings</em>: <br />
-                  <code>(Annual Energy Cost) * Energy Savings Factor (%)</code>
-                </li>
-              </ul>
-              <p className="text-xs mb-3">
-                <em>Energy Savings Factor (Our assumption, e.g., 8%):</em> The
-                percentage reduction in energy costs possible through better
-                tracking.
-              </p>
-
-              <p className="font-semibold">2. Savings on Assets:</p>
-              <ul className="list-disc list-inside space-y-1 pl-2 mb-2">
-                <li>
-                  Calculate <em>Estimated Savings</em>: <br />
-                  <code>
-                    (Estimated Asset Value) * Asset Loss Reduction Factor (%)
-                  </code>
-                </li>
-              </ul>
-              <p className="text-xs mb-3">
-                <em>Asset Loss Reduction Factor (Our assumption, e.g., 3%):</em>
-                The percentage of asset value whose cost (loss, replacement) can
-                be avoided with better tracking.
-              </p>
-              <p className="font-semibold">
-                3. Total Savings (Optional) = Savings on Energy + Savings on
-                Assets.
-              </p>
-            </blockquote>
-
-            <h2 id="total">4. Total Estimated Annual Savings</h2>
-            <p>
-              The result displayed to the user is the
-              <strong>
-                sum of the estimated savings from all sections included by the
-                user
-              </strong>
-              (<code>Space</code> + <code>Maintenance</code> +<code>Admin</code>{" "}
-              + <code>Optional</code>).
-            </p>
-
-            <h2 id="assumptions">5. Key Assumptions and Limitations</h2>
-            <ul className="list-disc list-inside space-y-2 my-3">
-              <li>
-                <strong>Estimate, Not Guarantee:</strong> We emphasize that the
-                results are an <em>estimate</em>. Actual savings depend on the
-                accuracy of the data entered, the specifics of the client&apos;s
-                operations, and the quality of the Archibus implementation.
-              </li>
-              <li>
-                <strong>Improvement Factors:</strong> The percentages used
-                (e.g., 15%, 25%, 30%) are
-                <strong>our expert assumptions</strong> based on experience and
-                industry averages. They are key to the calculation and represent
-                the average potential that Archibus brings.
-              </li>
-              <li>
-                <strong>Focus on Savings:</strong> The calculator primarily
-                shows <em>potential annual savings</em> in operational costs. It
-                does not include the initial investment cost for Archibus
-                (licenses, implementation), although this information can be
-                used later for a full ROI (Return on Investment) calculation.
+                <strong>Separate mechanisms.</strong> Each area targets a
+                different source of waste, and staff are counted once:
+                maintenance labour is not also included under productivity.
+                Rent does appear in two places, space and lease administration,
+                but the lease rates are low enough (1–3%) that the overlap
+                does not materially inflate the total.
               </li>
             </ul>
 
-            <h2 id="conclusion">Conclusion</h2>
+            <h2 id="financials">4. ROI, payback and net present value</h2>
             <p>
-              The ROI calculator is a valuable tool for quantifying the
-              potential benefits of Archibus. By using client data about their
-              current operations and applying realistic improvement factors, it
-              provides a tangible estimate of annual savings, helping clients
-              more easily assess the financial viability of investing in a
-              modern IWMS solution.
+              If you enter a one-time cost and an annual running cost, the
+              calculator builds a {HORIZON_YEARS}-year cash flow and reports:
+            </p>
+            <ul>
+              <li>
+                <strong>Net benefit</strong>: total savings minus total costs
+                over {HORIZON_YEARS} years.
+              </li>
+              <li>
+                <strong>Return on investment</strong>: net benefit divided by
+                total costs.
+              </li>
+              <li>
+                <strong>Payback period</strong>: the point at which cumulative
+                net cash flow turns positive, including the ramp-up.
+              </li>
+              <li>
+                <strong>Net present value</strong>: future cash flows
+                discounted at {DEFAULT_SETTINGS.discountRatePct}% a year by
+                default. You can change the rate in the calculator.
+              </li>
+            </ul>
+            <p>
+              If you do not enter a cost, the calculator shows the size of
+              investment that your expected savings would repay within 24
+              months. We do not assume a price: licensing and implementation
+              depend on scope, so{" "}
+              <Link href="/contact">ask us for an indicative quote</Link>.
+            </p>
+
+            <h2 id="limits">5. What the estimate does not include</h2>
+            <ul>
+              <li>
+                Benefits that are real but hard to price: compliance, audit
+                readiness, employee experience, and faster and better-informed
+                decisions.
+              </li>
+              <li>
+                Internal effort on your side during implementation, such as
+                data collection and staff time in workshops.
+              </li>
+              <li>
+                Inflation and changes in your portfolio over the{" "}
+                {HORIZON_YEARS} years.
+              </li>
+            </ul>
+            <p>
+              The result is an estimate, not a quotation or a guarantee. It is
+              a sound basis for deciding whether a detailed assessment is worth
+              your time. That assessment uses your own data in place of
+              benchmarks.
+            </p>
+
+            <h2 id="privacy">6. Your data</h2>
+            <p>
+              All calculations run in your browser. The figures you enter are
+              kept on your device only while the tab is open, so a page reload
+              does not lose your work, and they are not sent to Arctis or
+              anyone else. Closing the tab or using <em>Clear all</em> removes
+              them.
             </p>
           </article>
+
+          <div className="mt-12 flex flex-col items-start gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center sm:justify-between md:p-8">
+            <div>
+              <p className="text-lg font-semibold tracking-tight text-slate-900">
+                Ready to see your own numbers?
+              </p>
+              <p className="mt-1 text-sm text-slate-600">
+                It takes about three minutes, and you can download the result
+                as PDF or Excel.
+              </p>
+            </div>
+            <Button asChild size="lg" className="group rounded-full px-6">
+              <Link href="/roi">
+                Open the calculator
+                <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </div>

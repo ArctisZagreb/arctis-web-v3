@@ -233,6 +233,48 @@
     animation: dash-flow 1.6s linear infinite;
   }
 
+  /* Klizač u ROI kalkulatoru (popunjeni dio preko --fill varijable) */
+  .roi-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 9999px;
+    cursor: pointer;
+    background: linear-gradient(
+      to right,
+      #2563eb 0%,
+      #2563eb var(--fill, 0%),
+      #e2e8f0 var(--fill, 0%),
+      #e2e8f0 100%
+    );
+    outline: none;
+  }
+  .roi-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #2563eb;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+    transition: box-shadow 0.15s ease;
+  }
+  .roi-range::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 9999px;
+    background: #ffffff;
+    border: 2px solid #2563eb;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+  }
+  .roi-range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.2);
+  }
+  .roi-range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.2);
+  }
+
   /* Beskonačni marquee za logotipe (CSS umjesto JS animacije) */
   @keyframes marquee {
     from {
