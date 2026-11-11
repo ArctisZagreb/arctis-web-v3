@@ -5,6 +5,7 @@ import { Mail, MapPin, Phone, ShieldCheck } from "lucide-react";
 import { headerNavLinks } from "@/data/navigation";
 import { siteInfo } from "@/data/siteInfo";
 import { footerContent } from "@/data/pageContent";
+import logoWhite from "../../../public/assets/logo/arctis-logo-brand-white.png";
 
 // Stupci navigacije: grupe iz glavnog izbornika + "Company"
 const navGroups = [
@@ -42,11 +43,10 @@ const Footer = () => {
           <div>
             <Link href="/" aria-label="Arctis – home" className="inline-block">
               <Image
-                src="/assets/logo/arctis-logo-blue.png"
-                alt="Arctis Logo"
-                width={120}
-                height={40}
-                className="brightness-0 invert"
+                src={logoWhite}
+                alt="Arctis"
+                sizes="140px"
+                className="h-[50px] w-auto"
               />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-400">

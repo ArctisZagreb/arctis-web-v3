@@ -16,18 +16,13 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose,
-} from "@/components/ui/sheet";
-import { Menu, X } from "lucide-react";
 import { headerNavLinks } from "@/data/navigation";
 import ListItem from "./ListItem";
+import MobileMenu from "./MobileMenu";
+// Statički import: URL dobiva hash sadržaja, pa se izmjena loga odmah vidi
+import logoBrand from "../../../public/assets/logo/arctis-logo-brand.png";
 
 const Header = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -70,11 +65,11 @@ const Header = () => {
           className="mr-6 flex items-center space-x-2 flex-shrink-0"
         >
           <Image
-            src="/assets/logo/arctis-logo-blue.png"
-            alt="Arctis Logo"
-            width={90}
-            height={30}
+            src={logoBrand}
+            alt="Arctis"
             priority
+            sizes="123px"
+            className="h-11 w-auto"
           />
         </Link>
 
@@ -136,67 +131,7 @@ const Header = () => {
         </div>
 
         <div className="flex items-center lg:hidden ml-auto">
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              className="w-[300px] sm:w-[400px] [&>button:first-of-type]:hidden"
-            >
-              <div className="flex justify-between items-center mb-6">
-                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Image
-                    src="/assets/logo/arctis-logo-blue.png"
-                    alt="Arctis Logo"
-                    width={80}
-                    height={26}
-                  />
-                </Link>
-                <SheetClose asChild>
-                  <Button variant="ghost" size="icon">
-                    <X className="h-5 w-5" />
-                    <span className="sr-only">Close menu</span>
-                  </Button>
-                </SheetClose>
-              </div>
-              <nav className="flex flex-col space-y-1">
-                {headerNavLinks.map((navItem) => (
-                  <div key={navItem.label}>
-                    {!navItem.sublinks ? (
-                      <SheetClose asChild>
-                        <Link
-                          href={navItem.href}
-                          className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-accent"
-                        >
-                          {navItem.label}
-                        </Link>
-                      </SheetClose>
-                    ) : (
-                      <div className="pl-4">
-                        <span className="block px-3 py-1 text-base font-medium text-muted-foreground">
-                          {navItem.label}
-                        </span>
-                        {navItem.sublinks.map((sub) => (
-                          <SheetClose asChild key={sub.label}>
-                            <Link
-                              href={sub.href}
-                              className="block pl-6 pr-3 py-1 rounded-md text-base font-medium text-foreground hover:bg-accent"
-                            >
-                              {sub.label}
-                            </Link>
-                          </SheetClose>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu isActive={isActive} />
         </div>
       </div>
     </header>

@@ -52,7 +52,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: siteInfo.companyName,
   url: siteInfo.siteUrl,
-  logo: `${siteInfo.siteUrl}/assets/logo/arctis-logo-blue.png`,
+  logo: `${siteInfo.siteUrl}/assets/logo/arctis-logo-brand.png`,
   email: siteInfo.email,
   telephone: siteInfo.phoneHref.replace("tel:", ""),
   vatID: siteInfo.legal.oib,
@@ -88,7 +88,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased flex flex-col",
